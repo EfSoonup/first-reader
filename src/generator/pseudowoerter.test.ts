@@ -82,4 +82,16 @@ describe("Pseudowörter", () => {
     expect(els.length).toBe(15);
     expect(new Set(els.map((e) => e.text.toLowerCase())).size).toBe(15);
   });
+
+  it("verdoppeln keinen Vokal (kein „Maa“: ungelernter langer Vokal)", () => {
+    const vokal = new Set(inhalte.inventar.filter((i) => i.typ === "vokal").map((i) => i.g));
+    for (const bekannt of [["m", "i", "a"], ["m", "a"], ["sch", "a", "ei", "m"]]) {
+      for (const el of viele(bekannt, 500)) {
+        const z = zerlege(el.text, inhalte.inventar)!;
+        for (let i = 1; i < z.length; i++) {
+          if (vokal.has(z[i])) expect(z[i], el.text).not.toBe(z[i - 1]);
+        }
+      }
+    }
+  });
 });

@@ -23,7 +23,7 @@ function baueGrapheme(muster: Form[], k: GeneratorKontext, rng: Rng): string[] |
     const letztes = i === folge.length - 1;
     const pool =
       folge[i] === "V"
-        ? vokale
+        ? vokale.filter((info) => info.g !== teile[i - 1]) // kein „aa“: langer Vokal ist noch nicht gelernt
         : konsonanten.filter(
             (info) =>
               (!erstes || info.anfang !== false) &&
