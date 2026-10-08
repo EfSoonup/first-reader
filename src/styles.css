@@ -57,3 +57,17 @@ button.leise, .leise { color: var(--leise); }
 .graphem { display: flex; flex-direction: column; align-items: center; font-size: 1.4rem; min-width: 72px; }
 .graphem.an { background: var(--gruen); border-color: var(--gruen); color: #fff; }
 .graphem small { font-size: 0.7rem; }
+.einzel { display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 32px; text-align: center; }
+.lesetext { font-size: var(--lesegroesse); font-weight: 700; margin: 0; min-height: 1.4em; }
+.bewertung { display: flex; gap: 16px; }
+.bewertung button { font-size: 1.5rem; padding: 0.75rem 2rem; }
+.blatt { background: var(--karte); border-radius: 16px; padding: 24px; }
+.zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 1.2em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
+.stern-markierung { width: 1.2em; font-size: 0.7em; }
+.satz { display: inline-flex; gap: 0.35em; align-items: center; }
+.bild { font-size: 1.1em; }
+.optionen { display: flex; gap: 24px; }
+.option { font-size: 72px; padding: 16px 24px; }
+.option.richtig { background: var(--gruen); border-color: var(--gruen); }
+.lob { font-size: 1.6rem; color: var(--gruen); }
+.sticker-gross { font-size: 120px; }
