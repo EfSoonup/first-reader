@@ -12,3 +12,8 @@ Lern-App für Leseanfänger (Erstklässler). Konzept: `docs/superpowers/specs/20
 
 - Konzept, UI-Texte und Inhalte: Deutsch.
 - Commit-Messages: Englisch.
+
+## Befehle
+
+- `npm test`, `npm run typecheck`, `npm run check-content` – alle drei müssen vor jedem Commit grün sein.
+- Inhalte (`content/*.json`) nur über den Skill `/neue-woerter` oder mit anschließendem `npm run check-content` ändern.
