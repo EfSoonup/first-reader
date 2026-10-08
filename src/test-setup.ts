@@ -8,3 +8,10 @@ afterEach(async () => {
     cleanup();
   }
 });
+
+// Node ≥ 25 bringt ein eigenes, ohne `--localstorage-file` unbrauchbares `localStorage` mit,
+// das jsdoms Speicher verdeckt. In jsdom-Tests den echten jsdom-Speicher verwenden.
+const jsdomFenster = (globalThis as { jsdom?: { window: Window } }).jsdom?.window;
+if (jsdomFenster) {
+  Object.defineProperty(globalThis, "localStorage", { value: jsdomFenster.localStorage, configurable: true });
+}

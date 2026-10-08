@@ -77,4 +77,20 @@ describe("Speicherung", () => {
     expect(sicherungFaellig(d, new Date(2026, 9, 5))).toBe(true);
     expect(sicherungFaellig({ ...d, letzteSicherung: new Date(2026, 9, 1).toISOString() }, new Date(2026, 9, 8))).toBe(false);
   });
+
+  it("kann die kaputten Rohdaten nicht beiseitelegen → Schreibschutz und ehrliche Meldung", () => {
+    class OhneSicherung extends TestSpeicher {
+      setItem(k: string, v: string) {
+        if (k.startsWith(DEFEKT_PRAEFIX)) throw new Error("QuotaExceededError");
+        super.setItem(k, v);
+      }
+    }
+    const sp = new OhneSicherung();
+    sp.setItem(SPEICHER_SCHLUESSEL, "{kaputt");
+    const e = ladeDaten(sp, jetzt);
+    expect(e.schreibschutz).toBe(true);
+    expect(e.fehler).not.toMatch(/beiseitegelegt/);
+    expect(e.fehler).toMatch(/nicht gespeichert/);
+    expect(sp.getItem(SPEICHER_SCHLUESSEL)).toBe("{kaputt");
+  });
 });

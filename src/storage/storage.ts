@@ -9,7 +9,8 @@ export interface Speicher {
   getItem(k: string): string | null;
   setItem(k: string, v: string): void;
 }
-export interface LadeErgebnis { daten: AppDaten; fehler: string | null }
+/** `schreibschutz`: kaputte Rohdaten liegen nur noch unter dem Hauptschlüssel – nicht überschreiben. */
+export interface LadeErgebnis { daten: AppDaten; fehler: string | null; schreibschutz?: true }
 
 export function holeSpeicher(): Speicher | null {
   try {
@@ -70,7 +71,13 @@ export function ladeDaten(speicher: Speicher | null, jetzt: Date): LadeErgebnis 
   try {
     speicher.setItem(DEFEKT_PRAEFIX + jetzt.toISOString(), roh);
   } catch {
-    // Sicherung der Rohdaten fehlgeschlagen – Meldung unten bleibt gleich
+    return {
+      daten: leereDaten(jetzt),
+      fehler:
+        "Gespeicherte Daten waren unlesbar und konnten nicht extra gesichert werden (Speicher voll?). " +
+        "Damit sie nicht verloren gehen, wird vorerst nicht gespeichert.",
+      schreibschutz: true,
+    };
   }
   return {
     daten: leereDaten(jetzt),

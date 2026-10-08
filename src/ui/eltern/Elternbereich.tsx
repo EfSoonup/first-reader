@@ -11,7 +11,10 @@ import { Wochenuebersicht } from "./Wochenuebersicht";
 const TABS = ["Buchstaben", "Protokoll", "Woche", "Sicherung", "Einstellungen"] as const;
 type Tab = (typeof TABS)[number];
 
-export function Elternbereich(p: { daten: AppDaten; aktualisiere: Aktualisiere; fehler: string | null; onZurueck(): void }) {
+export function Elternbereich(p: {
+  daten: AppDaten; aktualisiere: Aktualisiere; fehler: string | null; onZurueck(): void;
+  schreibschutz?: boolean; onFreigeben?(): void;
+}) {
   const [tab, setTab] = useState<Tab>("Buchstaben");
   return (
     <main className="seite eltern">
@@ -23,7 +26,14 @@ export function Elternbereich(p: { daten: AppDaten; aktualisiere: Aktualisiere; 
           ))}
         </nav>
       </div>
-      {p.fehler && <p role="alert" className="hinweis fehler nicht-drucken">{p.fehler}</p>}
+      {p.fehler && (
+        <p role="alert" className="hinweis fehler nicht-drucken">
+          {p.fehler}
+          {p.schreibschutz && p.onFreigeben && (
+            <>{" "}<button onClick={p.onFreigeben}>Alte Daten verwerfen und neu beginnen</button></>
+          )}
+        </p>
+      )}
       {sicherungFaellig(p.daten, new Date()) && tab !== "Sicherung" && (
         <p className="hinweis nicht-drucken">
           💾 Die letzte Sicherung ist über 14 Tage her.{" "}
