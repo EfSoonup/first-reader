@@ -1,6 +1,7 @@
 import { grossschreiben, istGesperrt } from "./grapheme";
 import { passtZerlegung, silbenKonsonanten, silbenVokale } from "./bausteine";
 import { waehle, type Rng } from "./rng";
+import type { Inhalte, WortEintrag } from "../content/typen";
 import type { GeneratorKontext, LeseElement } from "./typen";
 
 type Form = "KV" | "V" | "KVK";
@@ -36,10 +37,21 @@ function baueGrapheme(muster: Form[], k: GeneratorKontext, rng: Rng): string[] |
   return teile;
 }
 
+const echteWoerterCache = new WeakMap<Inhalte, Map<string, WortEintrag>>();
+
+function echteWoerterVon(inhalte: Inhalte): Map<string, WortEintrag> {
+  let karte = echteWoerterCache.get(inhalte);
+  if (!karte) {
+    karte = new Map(inhalte.woerter.map((w) => [w.text.toLowerCase(), w]));
+    echteWoerterCache.set(inhalte, karte);
+  }
+  return karte;
+}
+
 export function erzeugePseudowort(k: GeneratorKontext, rng: Rng): LeseElement | null {
   if (silbenVokale(k).length === 0 || silbenKonsonanten(k).length === 0) return null;
   const muster = k.bekannt.size >= LANG_AB ? [...MUSTER_KURZ, ...MUSTER_LANG] : MUSTER_KURZ;
-  const echteWoerter = new Map(k.inhalte.woerter.map((w) => [w.text.toLowerCase(), w]));
+  const echteWoerter = echteWoerterVon(k.inhalte);
   for (let versuch = 0; versuch < VERSUCHE; versuch++) {
     const teile = baueGrapheme(waehle(rng, muster), k, rng);
     if (!teile) continue;

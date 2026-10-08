@@ -2,10 +2,10 @@ import {
   buchstabenElemente, geschlosseneSilben, offeneSilben, woerterAlsElemente,
 } from "./bausteine";
 import { erzeugeBildsaetze } from "./bildsaetze";
-import { gewichteteElemente } from "./gewichtung";
+import { gewicht, gewichteteElemente } from "./gewichtung";
 import { grossschreiben } from "./grapheme";
 import { erzeugePseudowoerter } from "./pseudowoerter";
-import { mische, type Rng } from "./rng";
+import { gewichteteAuswahl, mische, type Rng } from "./rng";
 import type { GeneratorKontext, LeseElement, Leseblatt, Zeile } from "./typen";
 
 export const REIHE_LANG = 8;
@@ -21,11 +21,12 @@ export function buchstabenZeilenAnzahl(anzahlBekannt: number): number {
 
 /** Zufällige Reihe mit Wiederholungen, aber nie zweimal dasselbe direkt hintereinander. */
 function zufallsReihe(k: GeneratorKontext, rng: Rng, pool: readonly LeseElement[], laenge: number): LeseElement[] {
+  const gewichtet = pool.map((wert) => ({ wert, gewicht: gewicht(wert, k) })); // einmal pro Pool berechnen
   const reihe: LeseElement[] = [];
   for (let i = 0; i < laenge; i++) {
     const vorher = reihe.at(-1)?.text;
-    const kandidaten = pool.length > 1 ? pool.filter((e) => e.text !== vorher) : pool;
-    reihe.push(gewichteteElemente(k, rng, kandidaten, 1)[0]);
+    const kandidaten = pool.length > 1 ? gewichtet.filter((e) => e.wert.text !== vorher) : gewichtet;
+    reihe.push(gewichteteAuswahl(rng, kandidaten, 1)[0]);
   }
   return reihe;
 }
