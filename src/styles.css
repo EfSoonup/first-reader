@@ -71,3 +71,7 @@ button.leise, .leise { color: var(--leise); }
 .option.richtig { background: var(--gruen); border-color: var(--gruen); }
 .lob { font-size: 1.6rem; color: var(--gruen); }
 .sticker-gross { font-size: 120px; }
+.tabelle { border-collapse: collapse; width: 100%; background: var(--karte); }
+.tabelle th, .tabelle td { border: 1px solid var(--rand); padding: 8px 12px; text-align: left; }
+.unterschrift { margin-top: 48px; font-size: 1.2rem; }
+@media print { .druckbereich { font-size: 14pt; } }
