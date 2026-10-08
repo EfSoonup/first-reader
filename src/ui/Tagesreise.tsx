@@ -7,12 +7,12 @@ import { addiereSterne, vergebeTagesSticker } from "../progress/belohnungen";
 import { baueKontext } from "../progress/kontext";
 import { neueSitzung, upsertSitzung } from "../progress/sitzung";
 import type { AppDaten, Sitzung } from "../progress/typen";
-import { aktualisiereWiederholungen } from "../progress/wiederholung";
+import { aktualisiereWiederholungen, type LeseErgebnis } from "../progress/wiederholung";
 import {
   eingabe, istPausiert, LEERLAUF_BLATT_MS, LEERLAUF_EINZEL_MS, pausiere, setzeLeerlauf, starteZeitmesser, tick,
 } from "../progress/zeit";
 import { Abschluss } from "./Abschluss";
-import { Aufwaermen, type AufwaermErgebnis } from "./Aufwaermen";
+import { Aufwaermen } from "./Aufwaermen";
 import { BonusSpiel } from "./BonusSpiel";
 import { LeseblattAnsicht } from "./LeseblattAnsicht";
 import { SternZaehler } from "./SternZaehler";
@@ -54,7 +54,9 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
       const sekunden = Math.floor(zeit.current.aktivMs / 1000);
       setSitzung((s) => (s.aktiveSekunden === sekunden ? s : { ...s, aktiveSekunden: sekunden, ende: new Date(jetzt).toISOString() }));
     }, 1000);
-    const beiEingabe = () => {
+    const beiEingabe = (e: Event) => {
+      // Der Pause-Knopf schaltet selbst um; sonst höbe sein Zeiger-Druck die Pause vor dem Klick auf.
+      if (e.target instanceof Element && e.target.closest("[data-pause-knopf]")) return;
       zeit.current = eingabe(zeit.current, Date.now());
       setPausiert(false);
     };
@@ -92,21 +94,31 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     setPhase("abschluss");
   }
 
-  function aufwaermenFertig({ ergebnisse, sterne }: AufwaermErgebnis) {
-    const richtig = ergebnisse.filter((e) => e.richtig).length;
-    const s = aktuellerStand(sitzung);
-    setSitzung({
+  function zeitStand(): Pick<Sitzung, "aktiveSekunden" | "ende"> {
+    zeit.current = tick(zeit.current, Date.now());
+    return { aktiveSekunden: Math.floor(zeit.current.aktivMs / 1000), ende: new Date().toISOString() };
+  }
+
+  function aufwaermErgebnis(e: LeseErgebnis) {
+    const stand = zeitStand();
+    setSitzung((s) => ({
       ...s,
-      richtig: s.richtig + richtig,
-      fehlversuche: s.fehlversuche + ergebnisse.length - richtig,
-      gezeigteElemente: [...s.gezeigteElemente, ...ergebnisse.map((e) => e.text)],
-    });
-    aktualisiere((d) => ({
-      ...d,
-      wiederholungen: aktualisiereWiederholungen(d.wiederholungen, ergebnisse),
-      spielstand: addiereSterne(d.spielstand, sterne),
+      ...stand,
+      richtig: s.richtig + (e.richtig ? 1 : 0),
+      fehlversuche: s.fehlversuche + (e.richtig ? 0 : 1),
+      gezeigteElemente: [...s.gezeigteElemente, e.text],
     }));
-    setPhase("blatt");
+    aktualisiere((d) => ({ ...d, wiederholungen: aktualisiereWiederholungen(d.wiederholungen, [e]) }));
+  }
+
+  function stern() {
+    aktualisiere((d) => ({ ...d, spielstand: addiereSterne(d.spielstand, 1) }));
+  }
+
+  function bonusRundeGeloest() {
+    const stand = zeitStand();
+    setSitzung((s) => ({ ...s, ...stand, richtig: s.richtig + 1 }));
+    stern();
   }
 
   function blattFertig() {
@@ -114,7 +126,7 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     const s = aktuellerStand(sitzung);
     const neu = {
       ...s,
-      richtig: s.richtig + elemente.length,
+      richtig: s.richtig + elemente.filter((e) => e.typ !== "buchstabe").length,
       gezeigteElemente: [...s.gezeigteElemente, ...elemente.map((e) => e.text)],
     };
     setSitzung(neu);
@@ -134,12 +146,8 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     }
   }
 
-  function bonusFertig(geloest: number) {
-    const s = aktuellerStand(sitzung);
-    const neu = { ...s, richtig: s.richtig + geloest };
-    setSitzung(neu);
-    aktualisiere((d) => ({ ...d, spielstand: addiereSterne(d.spielstand, geloest) }));
-    beende(neu);
+  function bonusFertig() {
+    beende(aktuellerStand(sitzung));
   }
 
   function sofortBeenden() {
@@ -149,9 +157,10 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
   }
 
   function pauseKnopf() {
-    if (pausiert) return; // der Zeiger-Druck hat die Pause bereits aufgehoben
-    zeit.current = pausiere(zeit.current, Date.now());
-    setPausiert(true);
+    const jetzt = Date.now();
+    const warPausiert = istPausiert(zeit.current, jetzt);
+    zeit.current = warPausiert ? eingabe(zeit.current, jetzt) : pausiere(zeit.current, jetzt);
+    setPausiert(!warPausiert);
   }
 
   const heute = tageswerte([...daten.sitzungen.filter((x) => x.id !== sitzung.id), sitzung], start.tag);
@@ -161,13 +170,15 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
       <div className="kopfzeile">
         <SternZaehler sterne={daten.spielstand.sterne} />
         <span className="leise">{Math.floor(heute.aktiveSekunden / 60)} / {ziel} min</span>
-        <button onClick={pauseKnopf}>{pausiert ? "▶ Weiter" : "⏸ Pause"}</button>
+        <button data-pause-knopf onPointerDown={(e) => e.preventDefault()} onClick={pauseKnopf}>{pausiert ? "▶ Weiter" : "⏸ Pause"}</button>
         <button className="leise" onClick={sofortBeenden}>Sitzung beenden</button>
       </div>
       {pausiert && phase !== "abschluss" && <p className="hinweis">Pause – die Zeit läuft gerade nicht.</p>}
-      {phase === "aufwaermen" && <Aufwaermen elemente={start.material.aufwaermen} onFertig={aufwaermenFertig} />}
+      {phase === "aufwaermen" && <Aufwaermen elemente={start.material.aufwaermen} onFertig={() => setPhase("blatt")}
+        onErgebnis={aufwaermErgebnis} onStern={stern} />}
       {phase === "blatt" && <LeseblattAnsicht key={blattNummer} blatt={blatt} nummer={blattNummer} onFertig={blattFertig} />}
-      {phase === "bonus" && start.material.bonus && <BonusSpiel runden={start.material.bonus} onFertig={bonusFertig} />}
+      {phase === "bonus" && start.material.bonus && <BonusSpiel runden={start.material.bonus} onFertig={bonusFertig}
+        onGeloest={bonusRundeGeloest} />}
       {phase === "abschluss" && (
         <Abschluss sticker={abschluss.sticker} woerterHeute={heute.richtig} zielErreicht={abschluss.zielErreicht}
           bonusGesperrt={start.material.bonus === null} onFertig={onEnde} />

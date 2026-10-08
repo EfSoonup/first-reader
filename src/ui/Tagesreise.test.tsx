@@ -38,4 +38,39 @@ describe("Tagesreise", () => {
     expect(screen.getByText(/Bald freigeschaltet/)).toBeInTheDocument();
     expect(spy.daten.spielstand.stickerAlben).toEqual([["🐶"]]);
   });
+
+  it("▶ Weiter hebt die Pause wirklich auf", async () => {
+    const start = datenMit(["m", "i", "a"]);
+    render(<Tagesreise daten={start} aktualisiere={aktualisiereSpy(start).fn} onEnde={() => {}} />);
+    await userEvent.click(screen.getByRole("button", { name: /Pause/ }));
+    expect(screen.getByText(/die Zeit läuft gerade nicht/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /Weiter/ }));
+    expect(screen.getByRole("button", { name: /Pause/ })).toBeInTheDocument();
+    expect(screen.queryByText(/die Zeit läuft gerade nicht/)).toBeNull();
+  });
+
+  it("vorzeitiges Beenden behält Bewertungen, Sterne und Wiederholungen aus dem Aufwärmen", async () => {
+    const start = datenMit(["m", "i", "a"]);
+    const spy = aktualisiereSpy(start);
+    render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+    const erstes = document.querySelector(".lesetext")!.textContent;
+    await userEvent.keyboard("{Backspace}");
+    for (let i = 0; i < 4; i++) await userEvent.keyboard(" ");
+    await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+    expect(spy.daten.sitzungen[0]).toMatchObject({ richtig: 4, fehlversuche: 1 });
+    expect(spy.daten.spielstand.sterne).toBe(4);
+    expect(spy.daten.wiederholungen.map((w) => w.text)).toEqual([erstes]);
+  });
+
+  it("Buchstaben auf dem Blatt zählen nicht zur Lesemenge", async () => {
+    const start = datenMit(["m", "i", "a"]);
+    const spy = aktualisiereSpy(start);
+    render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+    for (let i = 0; i < 8; i++) await userEvent.keyboard(" ");
+    const zeilen = [...document.querySelectorAll(".zeile")];
+    const ohneBuchstaben = zeilen.filter((z) => !z.classList.contains("buchstaben"))
+      .reduce((n, z) => n + z.querySelectorAll(":scope > .element").length, 0);
+    await userEvent.click(screen.getByRole("button", { name: /Blatt fertig/ }));
+    expect(spy.daten.sitzungen[0].richtig).toBe(8 + ohneBuchstaben);
+  });
 });

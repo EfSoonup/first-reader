@@ -39,4 +39,12 @@ describe("Aufwärmen", () => {
     await userEvent.click(screen.getByRole("button", { name: /Richtig/ }));
     expect(onFertig).toHaveBeenCalledTimes(1);
   });
+
+  it("gedrückt gehaltene Taste bewertet nur ein Element", async () => {
+    const onFertig = vi.fn();
+    const drei = [...elemente, { typ: "silbe" as const, text: "am" }];
+    render(<Aufwaermen elemente={drei} onFertig={onFertig} />);
+    await userEvent.keyboard("[Space>6/]");
+    expect(screen.getByText("Noch 2")).toBeInTheDocument();
+  });
 });

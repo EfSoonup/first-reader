@@ -4,7 +4,10 @@ import type { BonusOption, BonusRunde } from "../generator/typen";
 
 const WEITER_NACH_MS = 700;
 
-export function BonusSpiel({ runden, onFertig }: { runden: BonusRunde[]; onFertig(geloest: number): void }) {
+/** `onGeloest` meldet jede gelöste Runde sofort; `onFertig` nur das Ende. */
+export function BonusSpiel({ runden, onFertig, onGeloest }: {
+  runden: BonusRunde[]; onFertig(geloest: number): void; onGeloest?(): void;
+}) {
   const [index, setIndex] = useState(0);
   const [wackelt, setWackelt] = useState<string | null>(null);
   const [geloest, setGeloest] = useState(false);
@@ -14,6 +17,7 @@ export function BonusSpiel({ runden, onFertig }: { runden: BonusRunde[]; onFerti
     if (geloest) return;
     if (!o.richtig) { setWackelt(o.emoji); return; }
     setGeloest(true);
+    onGeloest?.();
     setTimeout(() => {
       if (index + 1 >= runden.length) { onFertig(runden.length); return; }
       setIndex(index + 1);
