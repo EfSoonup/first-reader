@@ -61,8 +61,10 @@ button.leise, .leise { color: var(--leise); }
 .lesetext { font-size: var(--lesegroesse); font-weight: 700; margin: 0; min-height: 1.4em; }
 .bewertung { display: flex; gap: 16px; }
 .bewertung button { font-size: 1.5rem; padding: 0.75rem 2rem; }
+/* Breiter als .seite, damit eine Reihe (8 Silben, 6 Wörter) am Laptop in einer Zeile bleibt – Zeilen üben ist Teil des Lesens. */
+.seite.reise { max-width: 1400px; }
 .blatt { background: var(--karte); border-radius: 16px; padding: 24px; }
-.zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 1.2em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
+.zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 0.9em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
 .stern-markierung { width: 1.2em; font-size: 0.7em; }
 .satz { display: inline-flex; gap: 0.35em; align-items: center; }
 .bild { font-size: 1.1em; }
