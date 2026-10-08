@@ -34,6 +34,12 @@ export function Sicherung({ daten, aktualisiere, bestaetige = (f) => window.conf
 
   return (
     <section>
+      <aside role="note" aria-label="Datenschutz" className="hinweis">
+        <strong>Wo sind die Daten?</strong> Lesestart speichert alles nur in diesem Browser auf diesem Gerät.
+        Es gibt kein Konto, kein Tracking und keine Cookies, und nichts wird ins Internet übertragen.
+        Deshalb gilt: Werden die Browserdaten gelöscht oder ein anderes Gerät benutzt, ist der Fortschritt weg –
+        bitte regelmäßig eine Sicherung exportieren und die Datei aufbewahren.
+      </aside>
       <p>
         Letzte Sicherung:{" "}
         {daten.letzteSicherung ? new Date(daten.letzteSicherung).toLocaleDateString("de-DE") : "noch nie"}

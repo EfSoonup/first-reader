@@ -26,6 +26,7 @@ npm run dev
 1. In Claude Code: `/neue-woerter L` – ergänzt passende Wörter in `content/`.
 2. In der App: Elternbereich → Buchstaben → `L` anklicken.
 
-## Daten
+## Daten und Datenschutz
 
-Alles liegt im Browser (`localStorage`). Im Elternbereich regelmäßig **Sicherung exportieren**.
+- Alles liegt nur im Browser auf dem jeweiligen Gerät (`localStorage`). Es gibt kein Konto, kein Tracking, keine Cookies; die App überträgt nichts ins Internet (auch die Schrift ist eingebaut).
+- Werden die Browserdaten gelöscht oder ein anderes Gerät/ein anderer Browser benutzt, ist der Fortschritt weg. Deshalb im Elternbereich unter **Sicherung** regelmäßig exportieren (die App erinnert nach 14 Tagen) und die Datei aufbewahren.

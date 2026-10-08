@@ -32,4 +32,9 @@ describe("KinderStart", () => {
     await userEvent.click(screen.getByRole("button", { name: "Juhu!" }));
     expect(spy.daten.spielstand.offeneFeier).toEqual([]);
   });
+
+  it("sagt, dass alles auf diesem Gerät bleibt", () => {
+    render(<KinderStart daten={datenMit([])} aktualisiere={vi.fn()} {...leer()} />);
+    expect(screen.getByText(/Alles bleibt auf diesem Gerät/)).toBeInTheDocument();
+  });
 });

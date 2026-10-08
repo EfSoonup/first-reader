@@ -77,3 +77,4 @@ button.leise, .leise { color: var(--leise); }
 .tabelle th, .tabelle td { border: 1px solid var(--rand); padding: 8px 12px; text-align: left; }
 .unterschrift { margin-top: 48px; font-size: 1.2rem; }
 @media print { .druckbereich { font-size: 14pt; } }
+.fusszeile { font-size: 0.85rem; margin-top: 24px; }

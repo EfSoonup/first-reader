@@ -48,6 +48,7 @@ export function KinderStart(p: {
         ? <button className="haupt gross" onClick={p.onLos}>Los geht's!</button>
         : <p className="hinweis">Hier gibt's bald was zu lesen!</p>}
       <button onClick={p.onAlbum}>🎁 Sticker-Album</button>
+      <p className="leise fusszeile">🔒 Alles bleibt auf diesem Gerät.</p>
       {feierGraphem && (
         <Feier
           graphem={feierGraphem}

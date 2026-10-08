@@ -34,4 +34,13 @@ describe("Sicherung", () => {
     await screen.findByText(/abgebrochen/);
     expect(spy.fn).not.toHaveBeenCalled();
   });
+
+  it("erklärt Speicherort und Datenschutz", () => {
+    render(<Sicherung daten={datenMit([])} aktualisiere={() => {}} />);
+    const hinweis = screen.getByRole("note", { name: "Datenschutz" });
+    expect(hinweis).toHaveTextContent(/nur in diesem Browser/);
+    expect(hinweis).toHaveTextContent(/kein Tracking/);
+    expect(hinweis).toHaveTextContent(/keine Cookies/);
+    expect(hinweis).toHaveTextContent(/regelmäßig.*Sicherung/);
+  });
 });
