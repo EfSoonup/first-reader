@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inhalte } from "../content";
+import { testInhalte as inhalte } from "./test-inhalte";
 import { erzeugeBildsatz, erzeugeBildsaetze, nutzbareSchablonen } from "./bildsaetze";
 import { elementIstLesbar } from "./bausteine";
 import { erzeugeRng } from "./rng";

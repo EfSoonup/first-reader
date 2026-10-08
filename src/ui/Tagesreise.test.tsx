@@ -5,6 +5,9 @@ import { describe, expect, it, vi } from "vitest";
 import { Tagesreise } from "./Tagesreise";
 import { aktualisiereSpy, datenMit } from "./test-hilfen";
 
+// Feste Test-Inhalte statt der mitgelieferten Wortliste, damit Zahlen und 🔒-Zustand stabil bleiben.
+vi.mock("../content", async () => ({ inhalte: (await import("../generator/test-inhalte")).testInhalte }));
+
 describe("Tagesreise", () => {
   it("Aufwärmen → Leseblatt → weiteres Blatt, solange das Ziel offen ist; Sitzung wird gespeichert", async () => {
     const start = datenMit(["m", "i", "a"]);

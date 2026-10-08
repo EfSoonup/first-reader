@@ -5,6 +5,9 @@ import { describe, expect, it, vi } from "vitest";
 import { KinderStart } from "./KinderStart";
 import { aktualisiereSpy, datenMit } from "./test-hilfen";
 
+// Feste Test-Inhalte statt der mitgelieferten Wortliste, damit Zahlen und 🔒-Zustand stabil bleiben.
+vi.mock("../content", async () => ({ inhalte: (await import("../generator/test-inhalte")).testInhalte }));
+
 const leer = () => ({ onLos: vi.fn(), onAlbum: vi.fn(), onEltern: vi.fn() });
 
 describe("KinderStart", () => {

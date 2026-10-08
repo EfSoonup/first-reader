@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inhalte } from "../content";
+import { testInhalte as inhalte } from "./test-inhalte";
 import { zerlege } from "./grapheme";
 import { erzeugePseudowoerter, erzeugePseudowort } from "./pseudowoerter";
 import { erzeugeRng } from "./rng";

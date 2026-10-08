@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inhalte } from "../content";
+import { testInhalte as inhalte } from "./test-inhalte";
 import { BONUS_RUNDEN, erzeugeBonus } from "./bonus";
 import { erzeugeRng } from "./rng";
 import { testKontext } from "./test-hilfen";

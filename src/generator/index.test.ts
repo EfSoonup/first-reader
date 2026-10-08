@@ -17,7 +17,7 @@ describe("generiere", () => {
     for (let seed = 0; seed < 300; seed++) {
       const rng = erzeugeRng(seed * 7919);
       const anzahl = 2 + Math.floor(rng.next() * 19);
-      const k = testKontext(mische(rng, alle).slice(0, anzahl));
+      const k = testKontext(mische(rng, alle).slice(0, anzahl), { inhalte }); // echter Content
       if (!pruefeBuchstabenStand(k).ok) continue;
       geprueft++;
       const material = generiere(k, seed);
@@ -33,6 +33,16 @@ describe("generiere", () => {
       }
     }
     expect(geprueft).toBeGreaterThan(150);
+  });
+
+  it("ist auch mit allen Graphemen und dem echten Content schnell (< 50 ms pro Aufruf)", () => {
+    const k = testKontext(inhalte.inventar.map((i) => i.g), { inhalte });
+    generiere(k, 0); // Aufwärmen (JIT, Caches)
+    const durchlaeufe = 20;
+    const start = performance.now();
+    for (let seed = 1; seed <= durchlaeufe; seed++) generiere(k, seed);
+    const proAufruf = (performance.now() - start) / durchlaeufe;
+    expect(proAufruf).toBeLessThan(50);
   });
 });
 
