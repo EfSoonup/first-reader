@@ -19,12 +19,18 @@ npm run dev
 | `npm test` | alle Tests |
 | `npm run typecheck` | Typprüfung |
 | `npm run check-content` | Inhalte in `content/` prüfen |
+| `npm run coverage-content` | zeigt für typische Buchstaben-Reihenfolgen, wie viel Material nach jedem Buchstaben lesbar ist |
 | `npm run build` | statische Seite nach `dist/` bauen |
+
+## Inhalte
+
+Die App bringt eine vollständige, geprüfte Erstausstattung für alle 43 Grapheme mit (`content/`): rund 600 Wörter und Namen, gut 240 davon mit Bild fürs Bonusspiel, 39 Satzschablonen und 135 Bilder. Angezeigt werden immer nur Wörter, deren Buchstaben alle freigeschaltet sind – die Reihenfolge, in der die Schule Buchstaben einführt, ist also egal.
 
 ## Neuer Buchstabe
 
-1. In Claude Code: `/neue-woerter L` – ergänzt passende Wörter in `content/`.
-2. In der App: Elternbereich → Buchstaben → `L` anklicken.
+In der App: Elternbereich → Buchstaben → z. B. `L` anklicken. Mehr ist nicht nötig.
+
+Optional (mit Claude Code): `/neue-woerter L` ergänzt oder verbessert Wörter, Schablonen und Bilder für diesen Buchstaben, z. B. Lieblingswörter oder Namen aus der Klasse.
 
 ## Daten und Datenschutz
 

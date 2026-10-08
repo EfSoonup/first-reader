@@ -290,7 +290,9 @@ Schwerpunkt Generator und Fortschrittslogik:
 
 Die Inhalte liegen als JSON-Dateien in `content/` und **wachsen mit dem Kind**.
 
-**Erstausstattung (klein)**
+> **Nachtrag:** Damit auch Familien ohne Claude Code die App nutzen können, liefert die App inzwischen eine vollständige Liste für alle Grapheme mit (ca. 600 Wörter/Namen, 39 Schablonen, 135 Bilder; Abdeckung prüfbar mit `npm run coverage-content`). Der Skill dient nur noch zum Ergänzen und Verbessern. Der folgende Abschnitt beschreibt die ursprüngliche Erstausstattung, die als Test-Fixture (`src/generator/test-inhalte.ts`) erhalten bleibt.
+
+**Erstausstattung (klein, ursprünglich)**
 - Wortliste mit allen sinnvollen Wörtern und Namen für die aktuell bekannten Grapheme (M, I, A): z. B. `Mama`, `Mami`, `Mia`, `Mimi`, `am`, `im` – also nur eine Handvoll Einträge.
 - Bildvorrat: ca. 30 Emojis mit Platzhalter-Etiketten. Er hängt nicht von den bekannten Buchstaben ab, weil das Bild nie gelesen werden muss.
 - Satzschablonen, die mit dem aktuellen Stand nutzbar sind (`[Name] im [Ort-im]`, `[Name] am [Ort-am]`).
