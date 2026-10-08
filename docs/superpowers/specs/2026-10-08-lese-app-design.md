@@ -113,6 +113,7 @@ Ein Zufallsgenerator mit Startwert (Seed) macht jede Ausgabe reproduzierbar.
 Ein Wort ist **lesbar**, wenn es sich vollständig in bekannte Grapheme zerlegen lässt.
 
 - Zerlegung: von links nach rechts, jeweils das **längste passende Graphem aus dem Gesamtinventar** (z. B. `sch` vor `s`, `ei` vor `e`). Das Ergebnis ist unabhängig davon, was das Kind schon kann – `Schaf` ist also erst lesbar, wenn `sch`, `a` und `f` bekannt sind.
+- `st` und `sp` zählen nur **am Wortanfang** als eigenes Graphem (`Stein` = `st-ei-n`), im Wortinneren als zwei Buchstaben (`ist` = `i-s-t`).
 - Groß-/Kleinschreibung wird beim Prüfen ignoriert.
 - Für Ausnahmen kann ein Eintrag in der Wortliste eine **explizite Zerlegung** mitbringen (z. B. `Ver-ein` nicht als `Ve-rein`).
 
@@ -144,7 +145,7 @@ Ein Wort ist **lesbar**, wenn es sich vollständig in bekannte Grapheme zerlegen
 | 2–3 Zeilen | Wörter: ca. 50 % echte Wörter/Namen, Rest Pseudowörter (bei zu wenig echten Wörtern mehr Pseudowörter) | 6 |
 | 4–5 ⭐-Zeilen | je ein Bildsatz | 1 |
 
-Gibt es zu wenig Material für eine Zeilenart, entfällt sie bzw. wird gekürzt. Es wird nicht mit identischen Wiederholungen aufgefüllt.
+Buchstaben- und Silbenzeilen dürfen Elemente in zufälliger Reihenfolge wiederholen (wie auf dem Schulblatt), aber nie zweimal direkt hintereinander. In Wort- und Satzzeilen kommt jedes Element pro Blatt höchstens einmal vor; gibt es zu wenig Material, entfällt die Zeile bzw. wird gekürzt.
 
 ### 5.6 Bildsätze
 
