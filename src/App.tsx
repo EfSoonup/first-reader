@@ -1,3 +1,21 @@
+import { useState } from "react";
+import { Elternbereich } from "./ui/eltern/Elternbereich";
+import { KinderStart } from "./ui/KinderStart";
+import { StickerAlbum } from "./ui/StickerAlbum";
+import { useAppDaten } from "./ui/useAppDaten";
+
+type Ansicht = "start" | "reise" | "eltern" | "album";
+
 export default function App() {
-  return <h1>Lesestart</h1>;
+  const { daten, aktualisiere, fehler } = useAppDaten();
+  const [ansicht, setAnsicht] = useState<Ansicht>("start");
+  const zurStart = () => setAnsicht("start");
+
+  if (ansicht === "eltern") return <Elternbereich daten={daten} aktualisiere={aktualisiere} fehler={fehler} onZurueck={zurStart} />;
+  if (ansicht === "album") return <StickerAlbum daten={daten} onZurueck={zurStart} />;
+  if (ansicht === "reise") return <main className="seite"><p>Tagesreise folgt in Task 15.</p><button onClick={zurStart}>Zurück</button></main>;
+  return (
+    <KinderStart daten={daten} aktualisiere={aktualisiere}
+      onLos={() => setAnsicht("reise")} onAlbum={() => setAnsicht("album")} onEltern={() => setAnsicht("eltern")} />
+  );
 }
