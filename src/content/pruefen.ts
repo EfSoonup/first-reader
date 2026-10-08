@@ -16,6 +16,7 @@ export function pruefeInhalte(inhalte: Inhalte): string[] {
   }
 
   const gesehenW = new Set<string>();
+  const wortEmojis = new Map<string, string>();
   for (const w of inhalte.woerter) {
     if (!istText(w.text)) { fehler.push(`Wort ohne Text: ${JSON.stringify(w)}`); continue; }
     if (w.typ !== "wort" && w.typ !== "name") fehler.push(`Wort "${w.text}": Typ muss "wort" oder "name" sein`);
@@ -24,6 +25,11 @@ export function pruefeInhalte(inhalte: Inhalte): string[] {
     gesehenW.add(schluessel);
     if (!zerlege(w.text, inhalte.inventar, w.zerlegung)) fehler.push(`Wort "${w.text}" ist nicht zerlegbar`);
     if (w.emoji !== undefined && !istText(w.kategorie)) fehler.push(`Wort "${w.text}": Emoji ohne Kategorie`);
+    if (w.emoji !== undefined) {
+      const vorher = wortEmojis.get(w.emoji);
+      if (vorher) fehler.push(`Wort "${w.text}": Emoji ${w.emoji} doppelt (schon bei "${vorher}")`);
+      else wortEmojis.set(w.emoji, w.text);
+    }
     if (istGesperrt(w.text, inhalte.sperrliste)) fehler.push(`Wort "${w.text}" trifft die Sperrliste`);
   }
 

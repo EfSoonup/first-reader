@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { inhalte } from "./index";
+import { testInhalte } from "../generator/test-inhalte";
+import { inhalte as mitgeliefert } from "./index";
 import { pruefeInhalte } from "./pruefen";
 import type { Inhalte } from "./typen";
 
+// Fehlerfälle auf der festen Fixture, damit sie unabhängig vom mitgelieferten Content bleiben.
+const inhalte = testInhalte;
 const mit = (aenderung: Partial<Inhalte>): Inhalte => ({ ...inhalte, ...aenderung });
 
 describe("pruefeInhalte", () => {
   it("die mitgelieferten Inhalte sind gültig", () => {
-    expect(pruefeInhalte(inhalte)).toEqual([]);
+    expect(pruefeInhalte(mitgeliefert)).toEqual([]);
+    expect(pruefeInhalte(testInhalte)).toEqual([]);
   });
 
   it("findet doppelte Wörter", () => {
@@ -23,6 +27,11 @@ describe("pruefeInhalte", () => {
   it("findet Emoji ohne Kategorie", () => {
     const fehler = pruefeInhalte(mit({ woerter: [...inhalte.woerter, { text: "Oma", typ: "name", emoji: "👵" }] }));
     expect(fehler.join("\n")).toContain("Kategorie");
+  });
+
+  it("findet doppelte Emojis in der Wortliste", () => {
+    const fehler = pruefeInhalte(mit({ woerter: [...inhalte.woerter, { text: "Mutti", typ: "name", emoji: "👩", kategorie: "Familie" }] }));
+    expect(fehler.join("\n")).toContain("Emoji 👩 doppelt");
   });
 
   it("findet Sperrlisten-Treffer in der Wortliste", () => {
