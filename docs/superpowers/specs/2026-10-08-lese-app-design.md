@@ -62,7 +62,7 @@ Weitere Merkmale: schlichte Grundschrift mit einstöckigem „a“, keine Silben
 
 ### 4.1 Elternbereich
 
-Zugang über einen Knopf, der **3 Sekunden gedrückt gehalten** werden muss (Kindersperre).
+Zugang über einen normalen Knopf auf der Startseite (keine Kindersperre).
 
 - **Buchstaben verwalten:** Raster mit A–Z, Ä, Ö, Ü, ß sowie Lautverbindungen (`ei`, `ie`, `au`, `eu`, `äu`, `ch`, `sch`, `ck`, `pf`, `qu`, `ng`, `nk`, `st`, `sp`). Ein Klick schaltet einen Buchstaben frei; das Datum wird gespeichert. Ein bekannter Buchstabe gilt immer in Groß- **und** Kleinschreibung.
 - **Leseprotokoll:** Tabelle pro Tag – aktive Minuten, richtig gelesene Elemente, Fehlversuche, Tagesziel erreicht ja/nein.
@@ -84,8 +84,8 @@ Zugang über einen Knopf, der **3 Sekunden gedrückt gehalten** werden muss (Kin
 
 2. **📄 Leseblatt (Blattansicht)**
    - Ein neu generiertes Blatt im Schulstil (Aufbau siehe §5.5), ohne Leselineal.
-   - Bewertung: Jedes Wort gilt als richtig. Liest das Kind ein Wort falsch, klickt der Erwachsene darauf; das Wort wird markiert (erneuter Klick hebt die Markierung auf). In Bildsätzen ist jedes Wort einzeln anklickbar, das Bild nicht.
-   - Knopf **„Blatt fertig“** schließt das Blatt ab: markierte Wörter → Wiederholungsspeicher; das Blatt bringt **5 Sterne**.
+   - Keine Bewertung einzelner Wörter in der App – der Erwachsene korrigiert mündlich beim Lesen.
+   - Knopf **„Blatt fertig“** schließt das Blatt ab: Alle Elemente des Blatts zählen als gelesen; das Blatt bringt **5 Sterne**.
    - Ist das Tagesziel beim Abschluss noch nicht erreicht, folgt direkt ein neues Blatt. Ein Blatt wird nie mittendrin abgebrochen, weil das Ziel erreicht ist.
    - War das Tagesziel schon vor Sitzungsbeginn erreicht (zweite Sitzung am selben Tag), gibt es genau ein Blatt und danach den Bonus.
 
@@ -161,7 +161,7 @@ Gibt es zu wenig Material für eine Zeilenart, entfällt sie bzw. wird gekürzt.
 ### 5.7 Gewichtung und Abwechslung
 
 - **Neue Grapheme** (freigeschaltet in den letzten 7 Tagen): Elemente, die sie enthalten, werden **3× so häufig** gezogen.
-- **Wiederholungsspeicher:** Falsch gelesene Elemente werden in den folgenden Sitzungen bevorzugt eingeplant (im Aufwärmen bis zu 4 der 8 Plätze), bis sie **zweimal hintereinander** richtig gelesen wurden.
+- **Wiederholungsspeicher:** Im Aufwärmen mit ↻ bewertete Elemente werden in den folgenden Sitzungen bevorzugt eingeplant (im Aufwärmen bis zu 4 der 8 Plätze), bis sie **zweimal hintereinander** richtig gelesen wurden.
 - **Frische:** Elemente aus den letzten 2 Sitzungen werden stark abgewertet (nicht ausgeschlossen – bei kleinem Vorrat ist Wiederholung unvermeidbar).
 
 ### 5.8 Bonusspiel-Material
@@ -187,7 +187,7 @@ Abbildbare Wörter = Einträge der Wortliste mit Emoji. Pro Runde: ein lesbares 
 2. **🎁 Sticker-Album:** Pro Tag mit erreichtem Tagesziel wird **ein** Sticker (Tier-Emoji o. ä.) aufgedeckt und eingeklebt. Ein Album hat 30 Plätze; danach beginnt ein neues mit anderem Motiv.
 3. **😊 Wochen-Smileys:** 7 Felder (Mo–So); ein Smiley pro Tag mit erreichtem Tagesziel – wie auf dem Schulblatt.
 4. **🔗 Lese-Kette:** Anzahl Tage in Folge mit erreichtem Ziel. Reißt die Kette, beginnt sie neutral neu („Neue Kette!“) – ohne Verlust- oder Traurig-Darstellung.
-5. **🎉 Buchstaben-Feier:** Nach dem Freischalten eines neuen Graphems zeigt die App beim nächsten Start des Kinderbereichs eine Animation: „Neu: **L**! Jetzt kannst du 23 neue Wörter lesen.“ Die Zahl = Wörter/Namen der Wortliste, die durch dieses Graphem neu lesbar werden.
+5. **🎉 Buchstaben-Feier:** Nach dem Freischalten eines neuen Graphems zeigt die App beim nächsten Start des Kinderbereichs eine Animation: „Neu: **L**! Jetzt kannst du 23 neue Wörter lesen.“ Die Zahl = lesbare Wörter/Namen der Wortliste, die dieses Graphem enthalten. Sie bleibt dadurch korrekt, egal ob die Wortliste vor oder nach dem Freischalten ergänzt wird.
 
 ## 7. Technik
 
@@ -212,6 +212,8 @@ Abbildbare Wörter = Einträge der Wortliste mit Emoji. Pro Runde: ein lesbares 
 |---|---|---|
 | `content/` | Wortliste, Namen, Bildvorrat, Satzschablonen, Sperrliste, Grapheminventar (JSON) | – |
 | `generator/` | reine Logik: Lesbarkeit, Silben, Pseudowörter, Bildsätze, Gewichtung, Zusammenstellung von Aufwärmen/Blatt/Bonus | `content` |
+| `scripts/check-content` | prüft die Inhaltsdateien (Schema, Duplikate, Etiketten, Sperrliste) | `content`, `generator` |
+| `.claude/skills/neue-woerter/` | Claude-Skill zum Erweitern der Wortliste (§10) | `content` |
 | `progress/` | Sitzungen, Zeiterfassung, Wiederholungsspeicher, Sterne, Sticker, Smileys, Lese-Kette, Buchstaben-Feier | – |
 | `storage/` | Laden/Speichern, Schema-Version, Export/Import | `progress` |
 | `ui/` | Kinderbereich, Elternbereich, Animationen, Druck-Layout | alle |
@@ -279,17 +281,31 @@ Schwerpunkt Generator und Fortschrittslogik:
 - Wiederholungsspeicher: Eintrag nach 2× richtig in Folge entfernt.
 - Zeiterfassung: Leerlauf-Pause (60 s bzw. 5 min) und Pause-Knopf.
 - Tagesziel, Smileys, Lese-Kette und Sticker aus Sitzungsdaten korrekt berechnet.
-- Buchstaben-Feier: Anzahl neu lesbarer Wörter korrekt.
+- Buchstaben-Feier: Anzahl lesbarer Wörter mit dem neuen Graphem korrekt.
+- Inhaltsprüfung (`npm run check-content`): erkennt Schemafehler, Duplikate, unbekannte Bild-Etiketten und Sperrlisten-Treffer.
 - Export → Import ergibt identische Daten; ungültiger Import ändert nichts.
 
 ## 10. Inhalte
 
-Erstausstattung (von Claude erstellt, vom Elternteil einmal durchgesehen):
-- ca. 300 Grundschulwörter und Namen, davon möglichst viele mit Emoji (für das Bonusspiel)
-- ca. 100 Emojis mit Platzhalter-Etiketten für Bildsätze
-- ca. 15 Satzschablonen in steigender Schwierigkeit
-- Sperrliste für Pseudowörter
-- Grapheminventar (§4.1)
+Die Inhalte liegen als JSON-Dateien in `content/` und **wachsen mit dem Kind**.
+
+**Erstausstattung (klein)**
+- Wortliste mit allen sinnvollen Wörtern und Namen für die aktuell bekannten Grapheme (M, I, A): z. B. `Mama`, `Mami`, `Mia`, `Mimi`, `am`, `im` – also nur eine Handvoll Einträge.
+- Bildvorrat: ca. 30 Emojis mit Platzhalter-Etiketten. Er hängt nicht von den bekannten Buchstaben ab, weil das Bild nie gelesen werden muss.
+- Satzschablonen, die mit dem aktuellen Stand nutzbar sind (`[Name] im [Ort-im]`, `[Name] am [Ort-am]`).
+- Sperrliste für Pseudowörter, Grapheminventar (§4.1).
+
+**Erweitern per Claude-Skill `neue-woerter`** (liegt im Projekt unter `.claude/skills/neue-woerter/SKILL.md`)
+- **Aufruf:** in Claude Code, z. B. `/neue-woerter L` – sobald die Schule einen neuen Buchstaben einführt.
+- **Der Skill liest** das Grapheminventar, die bisherige Wortliste, den Bildvorrat und die Schablonen.
+- **Er erzeugt** kindgerechte neue Einträge, die mit den bisherigen Graphemen **plus dem neuen** lesbar sind und das neue Graphem enthalten:
+  - Wörter und Namen aus der Erfahrungswelt eines Erstklässlers (Familie, Tiere, Essen, Spielen, Schule); keine Fremdwörter, nichts Unangenehmes; Nomen großgeschrieben.
+  - zu jedem abbildbaren Wort ein passendes Emoji (für das Bonusspiel)
+  - neue Satzschablonen, die durch das Graphem möglich werden (z. B. mit L, T: `[Name] malt [Ding]`), und ggf. passende neue Bilder
+  - Ziel: ca. 10–30 neue Wörter pro Graphem, Qualität vor Menge
+- **Er trägt die Einträge direkt in die Dateien ein** (kein manuelles Kopieren), entfernt Duplikate und führt `npm run check-content` aus.
+- **Er zeigt eine kurze Liste der Neuzugänge**, damit der Elternteil Unpassendes streichen kann.
+- Die App selbst braucht dafür keine Internetverbindung und keinen API-Schlüssel; der Skill läuft nur beim Pflegen der Inhalte.
 
 ## 11. Ausblick (nach dem MVP)
 
@@ -302,7 +318,9 @@ Erstausstattung (von Claude erstellt, vom Elternteil einmal durchgesehen):
 | Entscheidung | Gewählt | Verworfen |
 |---|---|---|
 | Lesemedium | Bildschirm | Papierblätter drucken, Mischform |
-| Bewertung | Erwachsener bewertet + selbstprüfendes Bonusspiel | Spracherkennung, Selbstbestätigung |
+| Bewertung | Aufwärmen: Erwachsener klickt ✓/↻; Leseblatt: nur „Blatt fertig“; Bonusspiel prüft selbst | Wort-Markierung im Leseblatt, Spracherkennung, Selbstbestätigung |
+| Kindersperre Elternbereich | keine | 3 s gedrückt halten |
+| Wortliste | klein starten, pro neuem Buchstaben per Claude-Skill erweitern | große Liste vorab |
 | Generierung | regelbasiert + Wortliste + Emojis, KI später optional | KI von Anfang an |
 | Buchstabenpflege | Elternteil trägt wöchentlich ein | fest hinterlegte Fibel-Reihenfolge |
 | Ansicht | Hybrid: Einzelansicht (Aufwärmen, Bonus) + Blattansicht | nur Einzel- oder nur Blattansicht |
