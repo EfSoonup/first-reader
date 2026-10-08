@@ -1,0 +1,6 @@
+[
+  { "id": "name-im", "teile": ["[Name]", "im", "[Ort-im]"] },
+  { "id": "name-am", "teile": ["[Name]", "am", "[Ort-am]"] },
+  { "id": "name-malt", "teile": ["[Name]", "malt", "[Ding]"] },
+  { "id": "oma-ist-im", "teile": ["Oma", "ist", "im", "[Ort-im]"] }
+]

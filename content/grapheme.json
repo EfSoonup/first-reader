@@ -1,0 +1,21 @@
+[
+  { "g": "a", "typ": "vokal" }, { "g": "e", "typ": "vokal" }, { "g": "i", "typ": "vokal" },
+  { "g": "o", "typ": "vokal" }, { "g": "u", "typ": "vokal" }, { "g": "ä", "typ": "vokal" },
+  { "g": "ö", "typ": "vokal" }, { "g": "ü", "typ": "vokal" }, { "g": "ei", "typ": "vokal" },
+  { "g": "ie", "typ": "vokal" }, { "g": "au", "typ": "vokal" }, { "g": "eu", "typ": "vokal" },
+  { "g": "äu", "typ": "vokal" },
+  { "g": "b", "typ": "konsonant" }, { "g": "c", "typ": "konsonant", "silbe": false },
+  { "g": "d", "typ": "konsonant" }, { "g": "f", "typ": "konsonant" }, { "g": "g", "typ": "konsonant" },
+  { "g": "h", "typ": "konsonant" }, { "g": "j", "typ": "konsonant" }, { "g": "k", "typ": "konsonant" },
+  { "g": "l", "typ": "konsonant" }, { "g": "m", "typ": "konsonant" }, { "g": "n", "typ": "konsonant" },
+  { "g": "p", "typ": "konsonant" }, { "g": "r", "typ": "konsonant" }, { "g": "s", "typ": "konsonant" },
+  { "g": "t", "typ": "konsonant" }, { "g": "v", "typ": "konsonant" }, { "g": "w", "typ": "konsonant" },
+  { "g": "x", "typ": "konsonant", "silbe": false }, { "g": "y", "typ": "konsonant", "silbe": false },
+  { "g": "z", "typ": "konsonant" }, { "g": "ß", "typ": "konsonant", "anfang": false },
+  { "g": "ch", "typ": "konsonant", "anfang": false }, { "g": "sch", "typ": "konsonant" },
+  { "g": "ck", "typ": "konsonant", "anfang": false }, { "g": "pf", "typ": "konsonant" },
+  { "g": "qu", "typ": "konsonant", "ende": false }, { "g": "ng", "typ": "konsonant", "anfang": false },
+  { "g": "nk", "typ": "konsonant", "anfang": false },
+  { "g": "st", "typ": "konsonant", "nurWortanfang": true },
+  { "g": "sp", "typ": "konsonant", "nurWortanfang": true }
+]

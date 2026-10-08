@@ -1,0 +1,8 @@
+[
+  { "text": "am", "typ": "wort" },
+  { "text": "im", "typ": "wort" },
+  { "text": "Mama", "typ": "name", "emoji": "👩", "kategorie": "Familie" },
+  { "text": "Mami", "typ": "name" },
+  { "text": "Mia", "typ": "name" },
+  { "text": "Mimi", "typ": "name" }
+]
