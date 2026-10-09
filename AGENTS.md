@@ -5,8 +5,16 @@ Lern-App für Leseanfänger (Erstklässler). Konzept: `docs/superpowers/specs/20
 ## Wichtig: privates Projekt
 
 - **Nichts zu Firmen-Servern pushen**, dort keinen Remote anlegen, keine Issues/PRs erstellen. Dieses Projekt hat keinerlei Bezug zu einem Arbeitgeber.
-- Gepusht wird ausschließlich `main` nach `origin` (privates Repo, siehe unten). Weitere Remotes oder Branches nur, wenn der Nutzer das ausdrücklich verlangt.
+- Gepusht wird ausschließlich `main` nach `origin` (privates Konto, siehe unten). Weitere Remotes, Branches oder Tags nur, wenn der Nutzer das ausdrücklich verlangt – **nie `git push --tags` oder `--all`**: lokale `backup/*`-Tags enthalten alte Identitäten.
 - Keine Firmen-Tools, -Skills oder -Zugänge in diesem Projekt verwenden.
+
+## Öffentliches Repo
+
+Das Repo ist öffentlich und wird per GitHub Actions nach GitHub Pages deployt (`.github/workflows/deploy.yml`, bei jedem Push auf `main`). Alles, was committet wird, ist für alle sichtbar – auch in der Historie.
+
+- **Keine Geheimnisse:** keine Passwörter, Tokens, Keys. Konfiguration über `.env.local` (gitignored); öffentlich gedachte Werte (z. B. ein Supabase-„anon key“) sind ok, ein `service_role`-Key nie.
+- **Keine personenbezogenen Daten:** keine echten E-Mail-Adressen, Nachnamen, Schul- oder Klassennamen, keine Namen konkreter Kinder (auch nicht in Commit-Messages, Specs oder Plänen). In `content/` nur verbreitete Vornamen ohne Bezug zu realen Personen.
+- Die Content-Security-Policy wird beim Build in `index.html` eingefügt (`vite.config.ts`). Neue externe Quellen (z. B. ein Backend) dort ergänzen.
 
 ## GitHub-Konto und Identität
 

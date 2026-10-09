@@ -2,6 +2,8 @@
 
 First Reader für Leseanfänger: erzeugt täglich frische Silben, Wörter und Bildsätze aus den bekannten Buchstaben, misst die Lesezeit und belohnt mit Sternen und Stickern.
 
+Online: https://efsoonup.github.io/first-reader/
+
 Konzept: `docs/superpowers/specs/2026-10-08-first-reader-design.md`
 
 ## Starten
@@ -20,7 +22,7 @@ npm run dev
 | `npm run typecheck` | Typprüfung |
 | `npm run check-content` | Inhalte in `content/` prüfen |
 | `npm run coverage-content` | zeigt für typische Buchstaben-Reihenfolgen, wie viel Material nach jedem Buchstaben lesbar ist |
-| `npm run build` | statische Seite nach `dist/` bauen |
+| `npm run build` | statische Seite nach `dist/` bauen (bei jedem Push auf `main` automatisch nach GitHub Pages deployt) |
 
 ## Inhalte
 
@@ -30,7 +32,7 @@ Die App bringt eine vollständige, geprüfte Erstausstattung für alle 43 Graphe
 
 In der App: Elternbereich → Buchstaben → z. B. `L` anklicken. Mehr ist nicht nötig.
 
-Optional (mit Claude Code): `/neue-woerter L` ergänzt oder verbessert Wörter, Schablonen und Bilder für diesen Buchstaben, z. B. Lieblingswörter oder Namen aus der Klasse.
+Optional (mit Claude Code): `/neue-woerter L` ergänzt oder verbessert Wörter, Schablonen und Bilder für diesen Buchstaben, z. B. Lieblingswörter oder weitere Vornamen.
 
 ## Daten und Datenschutz
 
