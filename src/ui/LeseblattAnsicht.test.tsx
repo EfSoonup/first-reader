@@ -37,8 +37,8 @@ describe("Leseblatt", () => {
   });
 
   it("teilt Zeilen, die nicht in die Breite passen, gleichmäßig auf", () => {
-    // Jede Silbe 100 px breit, 350 px Zeile minus 100 px Stern-Spalte: zwei Silben pro Zeile.
-    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(350);
+    // Jede Silbe 100 px breit, 250 px Zeile: zwei Silben pro Zeile.
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(250);
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({ width: 100 } as DOMRect);
     const silben = ["ma", "mi", "mo", "la", "li", "lo", "sa", "so"].map((text) => ({ typ: "silbe" as const, text }));
     const blatt = { zeilen: [{ art: "silben" as const, stern: false, elemente: silben }] };

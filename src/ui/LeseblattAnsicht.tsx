@@ -26,9 +26,8 @@ function messePlatz(abschnitt: HTMLElement, blatt: Leseblatt): (elemente: LeseEl
   const stil = getComputedStyle(erste);
   const px = (wert: string) => parseFloat(wert) || 0;
   const luecke = px(stil.columnGap);
-  const markierung = erste.querySelector(".stern-markierung")?.getBoundingClientRect().width ?? 0;
-  const haken = luecke + 0.6 * px(stil.fontSize);
-  const platz = erste.clientWidth - px(stil.paddingLeft) - px(stil.paddingRight) - markierung - luecke - haken;
+  // Der Haken sitzt im rechten Innenabstand (styles.css) und ist damit schon abgezogen.
+  const platz = erste.clientWidth - px(stil.paddingLeft) - px(stil.paddingRight);
   if (platz <= 0) return () => true; // kein Layout (z. B. in Tests)
 
   const breiten = new Map<LeseElement, number>();
@@ -67,7 +66,7 @@ export function LeseblattAnsicht({ blatt: original, nummer, onFertig }: { blatt:
             e.preventDefault();
             umschalten(i);
           }}>
-          <span className="stern-markierung" aria-hidden="true">{zeile.stern ? "⭐" : ""}</span>
+          {zeile.stern && <span className="stern-markierung" aria-hidden="true">⭐</span>}
           {zeile.elemente.map((el, j) => <Element key={j} el={el} />)}
           {gelesen.has(i) && <span className="zeile-haken" aria-hidden="true">✓</span>}
         </div>

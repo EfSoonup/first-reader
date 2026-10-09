@@ -79,10 +79,12 @@ button.leise, .leise { color: var(--leise); }
 .seite.reise { max-width: 1400px; }
 .blatt { background: var(--karte); border-radius: 16px; padding: 24px; }
 .zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 0.9em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
-.zeile { cursor: pointer; border-radius: 8px; transition: background 0.3s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.zeile { position: relative; padding-left: 0.2em; padding-right: 0.7em; cursor: pointer; border-radius: 8px; transition: background 0.3s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .zeile.gelesen { background: #e6f2e8; }
-.zeile-haken { margin-left: auto; color: var(--gruen); font-size: 0.6em; }
-.stern-markierung { width: 1.2em; font-size: 0.7em; }
+/* Der Haken liegt im rechten Innenabstand der Zeile und kostet so keinen Platz für Wörter. */
+.zeile-haken { position: absolute; right: 0.1em; top: 50%; transform: translateY(-50%); color: var(--gruen); font-size: 0.6em; }
+/* Nur Bildsatz-Zeilen tragen einen Stern; andere Zeilen halten keinen Platz dafür frei. */
+.stern-markierung { font-size: 0.5em; margin-right: -0.6em; }
 .satz { display: inline-flex; gap: 0.35em; align-items: center; }
 .bild { font-size: 1.1em; }
 /* Drei Bilder passen auch auf ein schmales Handy nebeneinander. */
@@ -99,7 +101,8 @@ button.leise, .leise { color: var(--leise); }
 /* Handy: Das Blatt wird näher am Auge gehalten als ein Laptop, daher reicht eine kleinere Schrift.
    Zusammen mit kürzeren Zeilen (src/ui/zeilen.ts) bleibt jede Zeile eine Zeile. */
 @media (max-width: 599px) {
-  :root { --blattgroesse: 36px; }
-  .seite { padding: 12px; }
-  .blatt { padding: 12px; }
+  :root { --blattgroesse: 32px; }
+  .seite { padding: 8px; }
+  .blatt { padding: 12px 8px; }
+  .zeile { column-gap: 0.7em; }
 }

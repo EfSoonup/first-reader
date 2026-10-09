@@ -210,7 +210,7 @@ Abbildbare Wörter = Einträge der Wortliste mit Emoji. Pro Runde: ein lesbares 
 | Speicherung | `localStorage`, versioniertes JSON-Schema | Datenmenge winzig, kein Server |
 
 - Kein Backend. Start lokal mit `npm install` (einmalig) und `npm run dev`.
-- Darstellung: Lesetext 48–64 px (auf dem Handy, das näher am Auge gehalten wird, Leseblatt 36 px), viel Weißraum, gedeckte Farben; Klickflächen mindestens 48 px (tablet-tauglich).
+- Darstellung: Lesetext 48–64 px (auf dem Handy, das näher am Auge gehalten wird, Leseblatt 32 px), viel Weißraum, gedeckte Farben; Klickflächen mindestens 48 px (tablet-tauglich).
 - **Später optional:** statisches Hosting (z. B. GitHub Pages) und PWA-Plugin für Installation/Offline auf dem Tablet.
 
 ### 7.1 Bausteine
