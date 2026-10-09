@@ -8,6 +8,12 @@ Lern-App für Leseanfänger (Erstklässler). Konzept: `docs/superpowers/specs/20
 - Gepusht wird ausschließlich `main` nach `origin` (privates Konto, siehe unten). Weitere Remotes, Branches oder Tags nur, wenn der Nutzer das ausdrücklich verlangt – **nie `git push --tags` oder `--all`**: lokale Hilfs-Tags und -Branches (z. B. Backups vor einem History-Rewrite) können alte Identitäten enthalten.
 - Keine Firmen-Tools, -Skills oder -Zugänge in diesem Projekt verwenden.
 
+## Branches
+
+- **Jedes Feature auf einem eigenen Branch** entwickeln (von `main` abzweigen, z. B. `feat/<kurzname>`), nicht direkt auf `main` committen.
+- Ist das Feature fertig und sind alle Checks grün (siehe „Befehle“), in `main` mergen und `main` **direkt pushen** – ohne Rückfrage.
+- Feature-Branches bleiben lokal (siehe oben: gepusht wird nur `main`) und werden nach dem Merge gelöscht.
+
 ## Öffentliches Repo
 
 Das Repo ist öffentlich und wird per GitHub Actions nach GitHub Pages deployt (`.github/workflows/deploy.yml`, bei jedem Push auf `main`). Alles, was committet wird, ist für alle sichtbar – auch in der Historie.
