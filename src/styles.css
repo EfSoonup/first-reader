@@ -12,6 +12,8 @@
   --blattgroesse: 48px;
 }
 * { box-sizing: border-box; }
+/* Touch: kein Doppeltipp-Zoom (Zwei-Finger-Zoom bleibt), kein Neuladen durch Herunterziehen, keine Schriftvergrößerung im Querformat. */
+html { touch-action: manipulation; overscroll-behavior-y: contain; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0;
   font-family: var(--schrift);
@@ -28,6 +30,13 @@ button {
   border: 2px solid var(--rand);
   background: var(--karte);
   cursor: pointer;
+  touch-action: manipulation;
+}
+/* Langes Drücken auf Lese- und Spielflächen soll weder Text markieren noch das iOS-Menü öffnen. */
+button, .lesetext, .zeile, .maskottchen, .sticker, .feier-graphem {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 button.haupt { background: var(--akzent); border-color: var(--akzent); color: #fff; font-weight: 700; }
 .seite { max-width: 960px; margin: 0 auto; padding: 16px; }
@@ -64,19 +73,20 @@ button.leise, .leise { color: var(--leise); }
 .einzel { display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 32px; text-align: center; }
 .lesetext { font-size: var(--lesegroesse); font-weight: 700; margin: 0; min-height: 1.4em; }
 .bewertung { display: flex; gap: 16px; }
-.bewertung button { font-size: 1.5rem; padding: 0.75rem 2rem; }
+.bewertung button { font-size: 1.5rem; padding: 0.75rem clamp(1rem, 5vw, 2rem); white-space: nowrap; }
 /* Breiter als .seite, damit eine Reihe (8 Silben, 6 Wörter) am Laptop in einer Zeile bleibt – Zeilen üben ist Teil des Lesens. */
 .seite.reise { max-width: 1400px; }
 .blatt { background: var(--karte); border-radius: 16px; padding: 24px; }
 .zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 0.9em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
-.zeile { cursor: pointer; border-radius: 8px; transition: background 0.3s; }
+.zeile { cursor: pointer; border-radius: 8px; transition: background 0.3s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .zeile.gelesen { background: #e6f2e8; }
 .zeile-haken { margin-left: auto; color: var(--gruen); font-size: 0.6em; }
 .stern-markierung { width: 1.2em; font-size: 0.7em; }
 .satz { display: inline-flex; gap: 0.35em; align-items: center; }
 .bild { font-size: 1.1em; }
-.optionen { display: flex; gap: 24px; }
-.option { font-size: 72px; padding: 16px 24px; }
+/* Drei Bilder passen auch auf ein schmales Handy nebeneinander. */
+.optionen { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 3vw, 24px); }
+.option { font-size: clamp(48px, 15vw, 72px); padding: 0.2em 0.3em; }
 .option.richtig { background: var(--gruen); border-color: var(--gruen); }
 .lob { font-size: 1.6rem; color: var(--gruen); }
 .sticker-gross { font-size: 120px; }

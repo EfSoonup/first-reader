@@ -39,6 +39,8 @@ export function Sicherung({ daten, aktualisiere, bestaetige = (f) => window.conf
         Es gibt kein Konto, kein Tracking und keine Cookies, und nichts wird ins Internet übertragen.
         Deshalb gilt: Werden die Browserdaten gelöscht oder ein anderes Gerät benutzt, ist der Fortschritt weg –
         bitte regelmäßig eine Sicherung exportieren und die Datei aufbewahren.
+        <br /><strong>iPhone/iPad:</strong> Lesestart über „Teilen → Zum Home-Bildschirm“ installieren und von dort
+        starten. Im normalen Safari-Tab löscht Safari die Daten, wenn die Seite 7 Tage nicht geöffnet wurde.
       </aside>
       <p>
         Letzte Sicherung:{" "}

@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { leereDaten } from "../progress/typen";
 import {
-  DEFEKT_PRAEFIX, exportiere, importiere, ladeDaten, pruefeDaten, sicherungFaellig, SPEICHER_SCHLUESSEL,
+  bitteUmDauerhaftenSpeicher, DEFEKT_PRAEFIX, exportiere, importiere, ladeDaten, pruefeDaten, sicherungFaellig, SPEICHER_SCHLUESSEL,
   speichereDaten, type Speicher,
 } from "./storage";
 
@@ -92,5 +92,34 @@ describe("Speicherung", () => {
     expect(e.fehler).not.toMatch(/beiseitegelegt/);
     expect(e.fehler).toMatch(/nicht gespeichert/);
     expect(sp.getItem(SPEICHER_SCHLUESSEL)).toBe("{kaputt");
+  });
+});
+
+describe("dauerhafter Speicher", () => {
+  const umgebung = (persisted: boolean, standalone: boolean) => {
+    const persist = vi.fn(async () => true);
+    return { persist, storage: { persisted: async () => persisted, persist }, standalone };
+  };
+
+  it("bittet in der installierten App um dauerhaften Speicher", async () => {
+    const u = umgebung(false, true);
+    expect(await bitteUmDauerhaftenSpeicher(u.storage, u.standalone)).toBe(true);
+    expect(u.persist).toHaveBeenCalledOnce();
+  });
+
+  it("fragt im normalen Browser-Tab nicht nach (Firefox zeigte sonst eine Rückfrage)", async () => {
+    const u = umgebung(false, false);
+    expect(await bitteUmDauerhaftenSpeicher(u.storage, u.standalone)).toBe(false);
+    expect(u.persist).not.toHaveBeenCalled();
+  });
+
+  it("fragt nicht erneut, wenn der Speicher schon dauerhaft ist", async () => {
+    const u = umgebung(true, true);
+    expect(await bitteUmDauerhaftenSpeicher(u.storage, u.standalone)).toBe(true);
+    expect(u.persist).not.toHaveBeenCalled();
+  });
+
+  it("kommt ohne Storage-API aus", async () => {
+    expect(await bitteUmDauerhaftenSpeicher(undefined, true)).toBe(false);
   });
 });

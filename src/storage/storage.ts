@@ -24,7 +24,23 @@ export function holeSpeicher(): Speicher | null {
   }
 }
 
-const istObjekt = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
+type StorageApi = Pick<StorageManager, "persisted" | "persist">;
+
+/**
+ * Bittet den Browser, die Daten nicht bei Platzmangel zu löschen. Nur in der installierten App:
+ * Dort entscheiden Browser still; im normalen Tab würde Firefox eine Rückfrage zeigen.
+ */
+export async function bitteUmDauerhaftenSpeicher(storage: StorageApi | undefined, standalone: boolean): Promise<boolean> {
+  if (!storage?.persist || !storage.persisted) return false;
+  try {
+    if (await storage.persisted()) return true;
+    return standalone ? await storage.persist() : false;
+  } catch {
+    return false;
+  }
+}
+
+const istObjekt =(x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
 const istString = (x: unknown): x is string => typeof x === "string";
 const istZahl = (x: unknown): x is number => typeof x === "number" && Number.isFinite(x);
 const istListe = <T>(x: unknown, pruefe: (e: unknown) => e is T): x is T[] => Array.isArray(x) && x.every(pruefe);
