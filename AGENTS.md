@@ -12,7 +12,7 @@ Lern-App für Leseanfänger (Erstklässler). Konzept: `docs/superpowers/specs/20
 
 - Einziges erlaubtes Konto: das private GitHub-Konto **EfSoonup** auf github.com. Niemals GitHub-Enterprise- oder andere Firmen-Hosts.
 - Remote-URL ausschließlich über den SSH-Alias `github-privat`: `git@github-privat:EfSoonup/first-reader.git` (Key `~/.ssh/id_ed25519_github_privat`, siehe `~/.ssh/config`).
-- Commit-Identität: `EfSoonup <190464499+EfSoonup@users.noreply.github.com>`. Sie kommt automatisch aus `~/.gitconfig-private` (per `includeIf "gitdir:~/repos/private/"`). Keine Firmen-Mail in Commits; im Zweifel `git config user.email` prüfen.
+- Commit-Identität: `EfSoonup <190464499+EfSoonup@users.noreply.github.com>` (GitHub-Noreply-Adresse; die echte E-Mail-Adresse darf nie in Commits oder Dateien auftauchen). Sie kommt automatisch aus `~/.gitconfig-private` (per `includeIf "gitdir:~/repos/private/"`). Keine Firmen-Mail in Commits; im Zweifel `git config user.email` prüfen.
 - Der globale Firmen-`pre-push`-Hook ist hier per `core.hooksPath = .git/hooks` abgeschaltet.
 
 ## Sprache
