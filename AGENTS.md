@@ -5,7 +5,7 @@ Lern-App für Leseanfänger (Erstklässler). Konzept: `docs/superpowers/specs/20
 ## Wichtig: privates Projekt
 
 - **Nichts zu Firmen-Servern pushen**, dort keinen Remote anlegen, keine Issues/PRs erstellen. Dieses Projekt hat keinerlei Bezug zu einem Arbeitgeber.
-- Gepusht wird ausschließlich `main` nach `origin` (privates Konto, siehe unten). Weitere Remotes, Branches oder Tags nur, wenn der Nutzer das ausdrücklich verlangt – **nie `git push --tags` oder `--all`**: lokale `backup/*`-Tags enthalten alte Identitäten.
+- Gepusht wird ausschließlich `main` nach `origin` (privates Konto, siehe unten). Weitere Remotes, Branches oder Tags nur, wenn der Nutzer das ausdrücklich verlangt – **nie `git push --tags` oder `--all`**: lokale Hilfs-Tags und -Branches (z. B. Backups vor einem History-Rewrite) können alte Identitäten enthalten.
 - Keine Firmen-Tools, -Skills oder -Zugänge in diesem Projekt verwenden.
 
 ## Öffentliches Repo
