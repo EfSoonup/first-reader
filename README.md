@@ -1,8 +1,8 @@
 # Lesestart
 
-Lese-App für Leseanfänger: erzeugt täglich frische Silben, Wörter und Bildsätze aus den bekannten Buchstaben, misst die Lesezeit und belohnt mit Sternen und Stickern.
+First Reader für Leseanfänger: erzeugt täglich frische Silben, Wörter und Bildsätze aus den bekannten Buchstaben, misst die Lesezeit und belohnt mit Sternen und Stickern.
 
-Konzept: `docs/superpowers/specs/2026-10-08-lese-app-design.md`
+Konzept: `docs/superpowers/specs/2026-10-08-first-reader-design.md`
 
 ## Starten
 

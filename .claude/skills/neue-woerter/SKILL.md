@@ -1,6 +1,6 @@
 ---
 name: neue-woerter
-description: Ergänzt oder verbessert die mitgelieferte Wortliste der Lese-App (Wörter, Namen, Satzschablonen, Bilder), z. B. für einen gerade gelernten Buchstaben ("/neue-woerter L") oder mit Lieblingswörtern/Namen aus der Klasse. Verwenden, wenn Inhalte in content/ ergänzt, korrigiert oder gestrichen werden sollen.
+description: Ergänzt oder verbessert die mitgelieferte Wortliste von First Reader (Wörter, Namen, Satzschablonen, Bilder), z. B. für einen gerade gelernten Buchstaben ("/neue-woerter L") oder mit Lieblingswörtern/Namen aus der Klasse. Verwenden, wenn Inhalte in content/ ergänzt, korrigiert oder gestrichen werden sollen.
 ---
 
 # Wortliste ergänzen oder verbessern

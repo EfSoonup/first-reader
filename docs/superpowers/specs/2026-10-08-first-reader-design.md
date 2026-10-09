@@ -1,4 +1,4 @@
-# Lese-App für Leseanfänger – Konzept (MVP)
+# First Reader für Leseanfänger – Konzept (MVP)
 
 *Arbeitstitel: „Lesestart“ · Stand: 2026-10-08 · Status: Entwurf zur Freigabe*
 
@@ -22,7 +22,7 @@ Ein Erstklässler lernt pro Woche 1–2 neue Buchstaben (Groß- und Kleinbuchsta
 - Das Kind bekommt jeden Tag Material, das es nicht auswendig kennt.
 - Kein generiertes Element enthält einen unbekannten Buchstaben (außer im Bildfeld eines Bildsatzes).
 - Die tägliche Lesezeit ist ohne Handnotiz belegbar.
-- Das Kind fragt von sich aus nach der Lese-App (qualitativ).
+- Das Kind fragt von sich aus nach First Reader (qualitativ).
 
 **Nutzungssituation**
 - Ein Erwachsener sitzt immer daneben und bewertet das Lesen.

@@ -1,4 +1,4 @@
-# Lese-App MVP – Umsetzungsplan
+# First Reader MVP – Umsetzungsplan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** Node ≥ 20, Vite 8, React 19, TypeScript 5.9, Vitest 5 (+ jsdom, Testing Library), Motion 12+ (`motion/react`), `@fontsource/andika`, `tsx` für Skripte.
 
-**Spec:** `docs/superpowers/specs/2026-10-08-lese-app-design.md`
+**Spec:** `docs/superpowers/specs/2026-10-08-first-reader-design.md`
 
 ## Global Constraints
 
@@ -76,7 +76,7 @@ Tests liegen neben dem Code als `*.test.ts(x)`. UI-Tests beginnen mit `// @vites
 `package.json`:
 ```json
 {
-  "name": "lese-app",
+  "name": "first-reader",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -4309,7 +4309,7 @@ An `src/styles.css` anhängen:
 ````markdown
 ---
 name: neue-woerter
-description: Erweitert die Wortliste der Lese-App um kindgerechte Wörter für einen neu gelernten Buchstaben (z. B. "/neue-woerter L"). Verwenden, wenn ein neuer Buchstabe oder Laut (auch sch, ei, au …) dazukommt.
+description: Erweitert die Wortliste von First Reader um kindgerechte Wörter für einen neu gelernten Buchstaben (z. B. "/neue-woerter L"). Verwenden, wenn ein neuer Buchstabe oder Laut (auch sch, ei, au …) dazukommt.
 ---
 
 # Neue Wörter für einen Buchstaben
@@ -4347,9 +4347,9 @@ Eine kurze Liste ausgeben: neue Wörter (mit Emoji), neue Schablonen, neue Bilde
 ````markdown
 # Lesestart
 
-Lese-App für Leseanfänger: erzeugt täglich frische Silben, Wörter und Bildsätze aus den bekannten Buchstaben, misst die Lesezeit und belohnt mit Sternen und Stickern.
+First Reader für Leseanfänger: erzeugt täglich frische Silben, Wörter und Bildsätze aus den bekannten Buchstaben, misst die Lesezeit und belohnt mit Sternen und Stickern.
 
-Konzept: `docs/superpowers/specs/2026-10-08-lese-app-design.md`
+Konzept: `docs/superpowers/specs/2026-10-08-first-reader-design.md`
 
 ## Starten
 
