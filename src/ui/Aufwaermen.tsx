@@ -7,11 +7,13 @@ export interface AufwaermErgebnis { ergebnisse: LeseErgebnis[]; sterne: number }
 const keinFokus = (e: PointerEvent) => e.preventDefault();
 
 /** `onErgebnis` und `onStern` melden jede Bewertung sofort, damit beim vorzeitigen Beenden nichts verloren geht. */
-export function Aufwaermen({ elemente, onFertig, onErgebnis, onStern }: {
+export function Aufwaermen({ elemente, onFertig, onErgebnis, onStern, gesperrt = false }: {
   elemente: LeseElement[];
   onFertig(e: AufwaermErgebnis): void;
   onErgebnis?(e: LeseErgebnis): void;
   onStern?(): void;
+  /** Ein Pop-up liegt darüber: Tasten bewerten dann nichts. */
+  gesperrt?: boolean;
 }) {
   const [schlange, setSchlange] = useState<number[]>(() => elemente.map((_, i) => i));
   const [falsch, setFalsch] = useState<ReadonlySet<number>>(new Set());
@@ -55,7 +57,7 @@ export function Aufwaermen({ elemente, onFertig, onErgebnis, onStern }: {
 
   useEffect(() => {
     const beiTaste = (e: KeyboardEvent) => {
-      if (e.repeat) return;
+      if (e.repeat || gesperrt) return;
       if (e.key === " " || e.key === "Enter") { e.preventDefault(); richtig(); }
       if (e.key === "Backspace") { e.preventDefault(); nochmal(); }
     };

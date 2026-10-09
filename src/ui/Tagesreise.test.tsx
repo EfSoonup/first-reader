@@ -21,6 +21,7 @@ describe("Tagesreise", () => {
     expect(screen.getByText("Leseblatt 2")).toBeInTheDocument();
     expect(spy.daten.spielstand.sterne).toBe(13);
     await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+    await userEvent.click(screen.getByRole("button", { name: /Für heute aufhören/ }));
     expect(onEnde).toHaveBeenCalled();
     expect(spy.daten.sitzungen).toHaveLength(1);
     expect(spy.daten.sitzungen[0].richtig).toBeGreaterThan(8);
@@ -60,9 +61,54 @@ describe("Tagesreise", () => {
     await userEvent.keyboard("{Backspace}");
     for (let i = 0; i < 4; i++) await userEvent.keyboard(" ");
     await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+    await userEvent.click(screen.getByRole("button", { name: /Für heute aufhören/ }));
     expect(spy.daten.sitzungen[0]).toMatchObject({ richtig: 4, fehlversuche: 1 });
     expect(spy.daten.spielstand.sterne).toBe(4);
     expect(spy.daten.wiederholungen.map((w) => w.text)).toEqual([erstes]);
+  });
+
+  describe("Sitzung beenden fragt nach", () => {
+    it("Weiterlesen schließt die Frage und bleibt auf dem Blatt", async () => {
+      const start = datenMit(["m", "i", "a"]);
+      const onEnde = vi.fn();
+      render(<Tagesreise daten={start} aktualisiere={aktualisiereSpy(start).fn} onEnde={onEnde} />);
+      for (let i = 0; i < 8; i++) await userEvent.keyboard(" ");
+      await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(screen.getByText(/Blatt zu Ende/)).toBeInTheDocument();
+      await userEvent.click(screen.getByRole("button", { name: /Weiterlesen/ }));
+      expect(screen.queryByRole("dialog")).toBeNull();
+      expect(screen.getByText("Leseblatt 1")).toBeInTheDocument();
+      expect(onEnde).not.toHaveBeenCalled();
+    });
+
+    it("solange die Frage offen ist, bewertet die Leertaste im Aufwärmen nichts", async () => {
+      const start = datenMit(["m", "i", "a"]);
+      const spy = aktualisiereSpy(start);
+      render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+      await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+      await userEvent.keyboard("{Backspace}");
+      expect(spy.daten.spielstand.sterne).toBe(0);
+      expect(spy.daten.wiederholungen).toEqual([]);
+    });
+
+    it("Ziel erreicht: Aufhören führt zum Abschluss mit Sticker", async () => {
+      const basis = datenMit(["m", "i", "a"]);
+      const iso = new Date().toISOString();
+      const start = {
+        ...basis,
+        sitzungen: [{ id: "frueher", start: iso, ende: iso, aktiveSekunden: 600, richtig: 50, fehlversuche: 0, gezeigteElemente: [] }],
+      };
+      const spy = aktualisiereSpy(start);
+      const onEnde = vi.fn();
+      render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={onEnde} />);
+      await userEvent.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+      expect(screen.getByText(/Smiley für heute/)).toBeInTheDocument();
+      await userEvent.click(screen.getByRole("button", { name: /Für heute aufhören/ }));
+      expect(onEnde).not.toHaveBeenCalled();
+      expect(screen.getByText("Geschafft! 🎉")).toBeInTheDocument();
+      expect(spy.daten.spielstand.stickerAlben).toEqual([["🐶"]]);
+    });
   });
 
   it("Buchstaben auf dem Blatt zählen nicht zur Lesemenge", async () => {
@@ -107,6 +153,24 @@ describe("Tagesreise", () => {
         await user.click(document.body);
       }
       expect(spy.daten.sitzungen[1].aktiveSekunden).toBe(vorher);
+    });
+
+    it("während der Rückfrage läuft keine Lesezeit, auch nicht beim Tippen im Pop-up", async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const start = datenMit(["m", "i", "a"]);
+      const spy = aktualisiereSpy(start);
+      render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+      await user.click(screen.getByRole("button", { name: /Sitzung beenden/ }));
+      const vorher = spy.daten.sitzungen[0].aktiveSekunden;
+      for (let i = 0; i < 5; i++) {
+        await act(async () => { vi.advanceTimersByTime(10_000); });
+        await user.click(screen.getByRole("dialog"));
+      }
+      expect(spy.daten.sitzungen[0].aktiveSekunden).toBe(vorher);
+      await user.click(screen.getByRole("button", { name: /Weiterlesen/ }));
+      await act(async () => { vi.advanceTimersByTime(5_000); });
+      expect(spy.daten.sitzungen[0].aktiveSekunden).toBeGreaterThan(vorher);
     });
 
     it("wird die App verdeckt, pausiert die Zeit sofort", async () => {

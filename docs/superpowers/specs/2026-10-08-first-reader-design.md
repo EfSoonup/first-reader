@@ -68,7 +68,7 @@ Zugang über einen normalen Knopf auf der Startseite (keine Kindersperre).
 - **Leseprotokoll:** Tabelle pro Tag – aktive Minuten, richtig gelesene Elemente, Fehlversuche, Tagesziel erreicht ja/nein.
 - **Wochenübersicht drucken:** Mo–So mit Minuten und gelesenen Wörtern plus Unterschriftsfeld; über die Druckfunktion des Browsers (eigenes Druck-Layout).
 - **Sicherung:** Export/Import aller Daten als JSON-Datei. Erinnerung, wenn die letzte Sicherung länger als 14 Tage zurückliegt.
-- **Sitzung beenden:** Während einer Tagesreise kann der Erwachsene die Sitzung jederzeit beenden; bis dahin erfasste Zeit und Ergebnisse bleiben gespeichert.
+- **Sitzung beenden:** Während einer Tagesreise kann der Erwachsene die Sitzung jederzeit beenden; bis dahin erfasste Zeit und Ergebnisse bleiben gespeichert. Vorher fragt ein kindgerechtes Pop-up nach (Bremse gegen versehentliches oder vorschnelles Beenden): Es zeigt Lesezeit und Wörter von heute und – solange das Tagesziel offen ist – die Restminuten bis zum Tages-Smiley. „💪 Weiterlesen“ ist vorausgewählt; solange das Pop-up offen ist, läuft keine Lesezeit. Ist das Ziel erreicht, führt „Für heute aufhören“ zum Abschluss mit Tages-Sticker.
 
 ### 4.2 Kinderbereich
 

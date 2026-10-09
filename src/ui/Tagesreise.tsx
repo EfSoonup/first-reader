@@ -14,6 +14,7 @@ import {
 import { Abschluss } from "./Abschluss";
 import { Aufwaermen } from "./Aufwaermen";
 import { BonusSpiel } from "./BonusSpiel";
+import { EndeDialog } from "./EndeDialog";
 import { LeseblattAnsicht } from "./LeseblattAnsicht";
 import { SternZaehler } from "./SternZaehler";
 import { TagesFortschritt } from "./TagesFortschritt";
@@ -42,6 +43,8 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
   const [sitzung, setSitzung] = useState<Sitzung>(() => neueSitzung(crypto.randomUUID(), start.jetzt));
   const [abschluss, setAbschluss] = useState({ sticker: null as string | null, zielErreicht: false });
   const [pausiert, setPausiert] = useState(false);
+  const [endeFrage, setEndeFrage] = useState(false);
+  const endeFrageOffen = useRef(false);
   const zeit = useRef(starteZeitmesser(Date.now(), leerlaufFuer(phase)));
   const ziel = daten.einstellungen.tageszielMinuten;
 
@@ -58,6 +61,8 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     const beiEingabe = (e: Event) => {
       // Der Pause-Knopf schaltet selbst um; sonst höbe sein Zeiger-Druck die Pause vor dem Klick auf.
       if (e.target instanceof Element && e.target.closest("[data-pause-knopf]")) return;
+      // Während der Rückfrage zum Beenden steht die Zeit; Tippen im Pop-up ist kein Lesen.
+      if (endeFrageOffen.current) return;
       zeit.current = eingabe(zeit.current, Date.now());
       setPausiert(false);
     };
@@ -161,8 +166,27 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     beende(aktuellerStand(sitzung));
   }
 
-  function sofortBeenden() {
+  function frageEnde() {
+    zeit.current = pausiere(zeit.current, Date.now());
+    setPausiert(true);
+    endeFrageOffen.current = true;
+    setEndeFrage(true);
+    setSitzung((s) => aktuellerStand(s));
+  }
+
+  function weiterlesen() {
+    zeit.current = eingabe(zeit.current, Date.now());
+    setPausiert(false);
+    endeFrageOffen.current = false;
+    setEndeFrage(false);
+  }
+
+  function aufhoeren() {
+    endeFrageOffen.current = false;
+    setEndeFrage(false);
     const s = aktuellerStand(sitzung);
+    // Ist das Tagesziel geschafft, soll der Tages-Sticker nicht verloren gehen.
+    if (zielMit(s)) { setSitzung(s); beende(s); return; }
     aktualisiere((d) => upsertSitzung(d, s));
     onEnde();
   }
@@ -184,17 +208,21 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
         {phase !== "abschluss" && (
           <button data-pause-knopf onPointerDown={(e) => e.preventDefault()} onClick={pauseKnopf}>{pausiert ? "▶ Weiter" : "⏸ Pause"}</button>
         )}
-        <button className="leise" onClick={sofortBeenden}>Sitzung beenden</button>
+        <button className="leise" onClick={phase === "abschluss" ? onEnde : frageEnde}>Sitzung beenden</button>
       </div>
-      {pausiert && phase !== "abschluss" && <p className="hinweis">Pause – die Zeit läuft gerade nicht.</p>}
+      {pausiert && !endeFrage && phase !== "abschluss" && <p className="hinweis">Pause – die Zeit läuft gerade nicht.</p>}
       {phase === "aufwaermen" && <Aufwaermen elemente={start.material.aufwaermen} onFertig={() => setPhase("blatt")}
-        onErgebnis={aufwaermErgebnis} onStern={stern} />}
+        onErgebnis={aufwaermErgebnis} onStern={stern} gesperrt={endeFrage} />}
       {phase === "blatt" && <LeseblattAnsicht key={blattNummer} blatt={blatt} nummer={blattNummer} onFertig={blattFertig} />}
       {phase === "bonus" && start.material.bonus && <BonusSpiel runden={start.material.bonus} onFertig={bonusFertig}
         onGeloest={bonusRundeGeloest} />}
       {phase === "abschluss" && (
         <Abschluss sticker={abschluss.sticker} woerterHeute={heute.richtig} zielErreicht={abschluss.zielErreicht}
           bonusGesperrt={start.material.bonus === null} onFertig={onEnde} />
+      )}
+      {endeFrage && (
+        <EndeDialog sekunden={heute.aktiveSekunden} zielMinuten={ziel} woerter={heute.richtig}
+          blattOffen={phase === "blatt"} onWeiter={weiterlesen} onAufhoeren={aufhoeren} />
       )}
     </main>
   );
