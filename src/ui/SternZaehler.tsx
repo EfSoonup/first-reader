@@ -1,9 +1,11 @@
 import { motion } from "motion/react";
 
+// Nur der Stern hüpft: Würde der ganze Zähler wachsen, ragte er auf dem Handy in den Zeitbalken daneben.
 export function SternZaehler({ sterne }: { sterne: number }) {
   return (
-    <motion.span key={sterne} className="sterne" initial={{ scale: 1.6 }} animate={{ scale: 1 }} aria-label={`${sterne} Sterne`}>
-      ⭐ {sterne}
-    </motion.span>
+    <span className="sterne" aria-label={`${sterne} Sterne`}>
+      <motion.span key={sterne} className="stern-hupf" initial={{ scale: 1.6 }} animate={{ scale: 1 }}>⭐</motion.span>
+      {" "}{sterne}
+    </span>
   );
 }

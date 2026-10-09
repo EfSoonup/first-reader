@@ -45,6 +45,7 @@ button.haupt { background: var(--akzent); border-color: var(--akzent); color: #f
 .kinderstart { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .maskottchen { font-size: 96px; }
 .sterne { font-size: 1.4rem; font-weight: 700; }
+.stern-hupf { display: inline-block; }
 button.gross { font-size: 2rem; padding: 1rem 2.5rem; }
 button.leise, .leise { color: var(--leise); }
 .fortschritt { position: relative; width: min(480px, 100%); height: 24px; background: var(--rand); border-radius: 12px; overflow: hidden; }
@@ -95,3 +96,10 @@ button.leise, .leise { color: var(--leise); }
 .unterschrift { margin-top: 48px; font-size: 1.2rem; }
 @media print { .druckbereich { font-size: 14pt; } }
 .fusszeile { font-size: 0.85rem; margin-top: 24px; }
+/* Handy: Das Blatt wird näher am Auge gehalten als ein Laptop, daher reicht eine kleinere Schrift.
+   Zusammen mit kürzeren Zeilen (src/ui/zeilen.ts) bleibt jede Zeile eine Zeile. */
+@media (max-width: 599px) {
+  :root { --blattgroesse: 36px; }
+  .seite { padding: 12px; }
+  .blatt { padding: 12px; }
+}

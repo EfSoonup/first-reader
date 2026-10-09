@@ -146,6 +146,8 @@ Ein Wort ist **lesbar**, wenn es sich vollständig in bekannte Grapheme zerlegen
 | 2–3 Zeilen | Wörter: ca. 50 % echte Wörter/Namen, Rest Pseudowörter (bei zu wenig echten Wörtern mehr Pseudowörter) | 6 |
 | 4–5 ⭐-Zeilen | je ein Bildsatz | 1 |
 
+Passt eine Zeile nicht in die Bildschirmbreite (Handy, Tablet hochkant), teilt die Blattansicht sie in so wenige gleich lange Zeilen wie nötig, statt sie umbrechen zu lassen. Menge und Reihenfolge des Blatts bleiben gleich; Satzzeilen werden nie geteilt.
+
 Buchstaben- und Silbenzeilen dürfen Elemente in zufälliger Reihenfolge wiederholen (wie auf dem Schulblatt), aber nie zweimal direkt hintereinander. In Wort- und Satzzeilen kommt jedes Element pro Blatt höchstens einmal vor; gibt es zu wenig Material, entfällt die Zeile bzw. wird gekürzt.
 
 ### 5.6 Bildsätze
@@ -208,7 +210,7 @@ Abbildbare Wörter = Einträge der Wortliste mit Emoji. Pro Runde: ein lesbares 
 | Speicherung | `localStorage`, versioniertes JSON-Schema | Datenmenge winzig, kein Server |
 
 - Kein Backend. Start lokal mit `npm install` (einmalig) und `npm run dev`.
-- Darstellung: Lesetext 48–64 px, viel Weißraum, gedeckte Farben; Klickflächen mindestens 48 px (tablet-tauglich).
+- Darstellung: Lesetext 48–64 px (auf dem Handy, das näher am Auge gehalten wird, Leseblatt 36 px), viel Weißraum, gedeckte Farben; Klickflächen mindestens 48 px (tablet-tauglich).
 - **Später optional:** statisches Hosting (z. B. GitHub Pages) und PWA-Plugin für Installation/Offline auf dem Tablet.
 
 ### 7.1 Bausteine
