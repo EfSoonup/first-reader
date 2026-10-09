@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { Tagesreise } from "./Tagesreise";
 import { aktualisiereSpy, datenMit } from "./test-hilfen";
 
@@ -75,5 +75,59 @@ describe("Tagesreise", () => {
       .reduce((n, z) => n + z.querySelectorAll(":scope > .element").length, 0);
     await userEvent.click(screen.getByRole("button", { name: /Blatt fertig/ }));
     expect(spy.daten.sitzungen[0].richtig).toBe(8 + ohneBuchstaben);
+  });
+
+  describe("Zeiterfassung", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+      Object.defineProperty(document, "visibilityState", { configurable: true, value: "visible" });
+    });
+
+    const ziel600 = () => {
+      const basis = datenMit(["m", "i", "a"]);
+      const iso = new Date().toISOString();
+      return {
+        ...basis,
+        sitzungen: [{ id: "frueher", start: iso, ende: iso, aktiveSekunden: 600, richtig: 50, fehlversuche: 0, gezeigteElemente: [] }],
+      };
+    };
+
+    it("auf dem Abschluss-Bildschirm läuft keine Lesezeit mehr", async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const start = ziel600();
+      const spy = aktualisiereSpy(start);
+      render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+      for (let i = 0; i < 8; i++) await user.keyboard(" ");
+      await user.click(screen.getByRole("button", { name: /Blatt fertig/ }));
+      expect(screen.getByText("Geschafft! 🎉")).toBeInTheDocument();
+      const vorher = spy.daten.sitzungen[1].aktiveSekunden;
+      for (let i = 0; i < 5; i++) {
+        await act(async () => { vi.advanceTimersByTime(10_000); });
+        await user.click(document.body);
+      }
+      expect(spy.daten.sitzungen[1].aktiveSekunden).toBe(vorher);
+    });
+
+    it("wird die App verdeckt, pausiert die Zeit sofort", async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const start = datenMit(["m", "i", "a"]);
+      const spy = aktualisiereSpy(start);
+      render(<Tagesreise daten={start} aktualisiere={spy.fn} onEnde={() => {}} />);
+      await act(async () => { vi.advanceTimersByTime(5_000); });
+      Object.defineProperty(document, "visibilityState", { configurable: true, value: "hidden" });
+      act(() => { document.dispatchEvent(new Event("visibilitychange")); });
+      const vorher = spy.daten.sitzungen[0].aktiveSekunden;
+      await act(async () => { vi.advanceTimersByTime(30_000); });
+      expect(spy.daten.sitzungen[0].aktiveSekunden).toBe(vorher);
+      expect(screen.getByText(/die Zeit läuft gerade nicht/)).toBeInTheDocument();
+    });
+  });
+
+  it("zeigt den Tagesfortschritt als Balken statt Minuten", () => {
+    const start = datenMit(["m", "i", "a"]);
+    render(<Tagesreise daten={start} aktualisiere={aktualisiereSpy(start).fn} onEnde={() => {}} />);
+    expect(screen.getByRole("progressbar", { name: "Tagesziel" })).toBeInTheDocument();
+    expect(screen.queryByText(/\/ 10 min/)).toBeNull();
   });
 });

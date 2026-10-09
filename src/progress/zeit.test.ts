@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  eingabe, istPausiert, LEERLAUF_BLATT_MS, LEERLAUF_EINZEL_MS, pausiere, setzeLeerlauf, starteZeitmesser, tick,
+  eingabe, istPausiert, LEERLAUF_BLATT_MS, LEERLAUF_EINZEL_MS, pausiere, setzeLeerlauf, starteZeitmesser, stoppe, tick,
 } from "./zeit";
 
 const s = (sekunden: number) => sekunden * 1000;
@@ -52,5 +52,15 @@ describe("Zeitmesser", () => {
     let z = starteZeitmesser(0, LEERLAUF_EINZEL_MS);
     for (let t = 1; t <= 30; t++) z = tick(z, s(t));
     expect(z.aktivMs).toBe(s(30));
+  });
+
+  it("nach dem Stopp zählt nichts mehr, auch nicht nach einer Eingabe", () => {
+    let z = starteZeitmesser(0, LEERLAUF_EINZEL_MS);
+    z = stoppe(z, s(20));
+    expect(z.aktivMs).toBe(s(20));
+    z = eingabe(z, s(30));
+    z = tick(z, s(50));
+    expect(z.aktivMs).toBe(s(20));
+    expect(istPausiert(z, s(50))).toBe(true);
   });
 });

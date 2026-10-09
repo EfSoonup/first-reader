@@ -23,4 +23,16 @@ describe("Leseblatt", () => {
     await userEvent.click(screen.getByRole("button", { name: /Blatt fertig/ }));
     expect(onFertig).toHaveBeenCalled();
   });
+
+  it("eine Zeile antippen markiert sie als gelesen, nochmal tippen hebt das auf", async () => {
+    const blatt = { zeilen: [{ art: "silben" as const, stern: false, elemente: [{ typ: "silbe" as const, text: "mi" }] }] };
+    render(<LeseblattAnsicht blatt={blatt} nummer={1} onFertig={() => {}} />);
+    const zeile = screen.getByRole("button", { name: /mi/ });
+    expect(zeile).toHaveAttribute("aria-pressed", "false");
+    await userEvent.click(screen.getByText("mi"));
+    expect(zeile).toHaveAttribute("aria-pressed", "true");
+    expect(zeile).toHaveClass("gelesen");
+    await userEvent.click(zeile);
+    expect(zeile).toHaveAttribute("aria-pressed", "false");
+  });
 });

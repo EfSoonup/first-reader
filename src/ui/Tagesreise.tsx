@@ -9,13 +9,14 @@ import { neueSitzung, upsertSitzung } from "../progress/sitzung";
 import type { AppDaten, Sitzung } from "../progress/typen";
 import { aktualisiereWiederholungen, type LeseErgebnis } from "../progress/wiederholung";
 import {
-  eingabe, istPausiert, LEERLAUF_BLATT_MS, LEERLAUF_EINZEL_MS, pausiere, setzeLeerlauf, starteZeitmesser, tick,
+  eingabe, istPausiert, LEERLAUF_BLATT_MS, LEERLAUF_EINZEL_MS, pausiere, setzeLeerlauf, starteZeitmesser, stoppe, tick,
 } from "../progress/zeit";
 import { Abschluss } from "./Abschluss";
 import { Aufwaermen } from "./Aufwaermen";
 import { BonusSpiel } from "./BonusSpiel";
 import { LeseblattAnsicht } from "./LeseblattAnsicht";
 import { SternZaehler } from "./SternZaehler";
+import { TagesFortschritt } from "./TagesFortschritt";
 import type { Aktualisiere } from "./useAppDaten";
 
 export const STERNE_PRO_BLATT = 5;
@@ -60,12 +61,20 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
       zeit.current = eingabe(zeit.current, Date.now());
       setPausiert(false);
     };
+    // Gesperrtes Tablet oder anderer Tab: sofort anhalten statt bis zum Leerlauf-Limit weiterzuzählen.
+    const beiSichtbarkeit = () => {
+      if (document.visibilityState !== "hidden") return;
+      zeit.current = pausiere(zeit.current, Date.now());
+      setPausiert(true);
+    };
     window.addEventListener("pointerdown", beiEingabe);
     window.addEventListener("keydown", beiEingabe);
+    document.addEventListener("visibilitychange", beiSichtbarkeit);
     return () => {
       clearInterval(takt);
       window.removeEventListener("pointerdown", beiEingabe);
       window.removeEventListener("keydown", beiEingabe);
+      document.removeEventListener("visibilitychange", beiSichtbarkeit);
     };
   }, []);
 
@@ -84,6 +93,8 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
   }
 
   function beende(s: Sitzung) {
+    // Der Abschluss-Bildschirm ist keine Lesezeit.
+    zeit.current = stoppe(zeit.current, Date.now());
     const erreicht = zielMit(s);
     let sticker: string | null = null;
     if (erreicht) {
@@ -169,8 +180,10 @@ export function Tagesreise({ daten, aktualisiere, onEnde }: { daten: AppDaten; a
     <main className="seite reise">
       <div className="kopfzeile">
         <SternZaehler sterne={daten.spielstand.sterne} />
-        <span className="leise">{Math.floor(heute.aktiveSekunden / 60)} / {ziel} min</span>
-        <button data-pause-knopf onPointerDown={(e) => e.preventDefault()} onClick={pauseKnopf}>{pausiert ? "▶ Weiter" : "⏸ Pause"}</button>
+        <TagesFortschritt sekunden={heute.aktiveSekunden} zielMinuten={ziel} klein />
+        {phase !== "abschluss" && (
+          <button data-pause-knopf onPointerDown={(e) => e.preventDefault()} onClick={pauseKnopf}>{pausiert ? "▶ Weiter" : "⏸ Pause"}</button>
+        )}
         <button className="leise" onClick={sofortBeenden}>Sitzung beenden</button>
       </div>
       {pausiert && phase !== "abschluss" && <p className="hinweis">Pause – die Zeit läuft gerade nicht.</p>}

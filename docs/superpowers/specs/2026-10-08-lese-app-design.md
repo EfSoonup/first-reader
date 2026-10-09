@@ -85,6 +85,7 @@ Zugang über einen normalen Knopf auf der Startseite (keine Kindersperre).
 2. **📄 Leseblatt (Blattansicht)**
    - Ein neu generiertes Blatt im Schulstil (Aufbau siehe §5.5), ohne Leselineal.
    - Keine Bewertung einzelner Wörter in der App – der Erwachsene korrigiert mündlich beim Lesen.
+   - Gelesene Zeilen tippt das Kind an (Zeile wird grün markiert, erneutes Tippen hebt das auf). Das ist optional, hilft beim Mitlesen und hält die Lesezeit am Laufen (siehe §6.1).
    - Knopf **„Blatt fertig“** schließt das Blatt ab: Alle Elemente des Blatts zählen als gelesen; das Blatt bringt **5 Sterne**.
    - Ist das Tagesziel beim Abschluss noch nicht erreicht, folgt direkt ein neues Blatt. Ein Blatt wird nie mittendrin abgebrochen, weil das Ziel erreicht ist.
    - War das Tagesziel schon vor Sitzungsbeginn erreicht (zweite Sitzung am selben Tag), gibt es genau ein Blatt und danach den Bonus.
@@ -177,10 +178,13 @@ Abbildbare Wörter = Einträge der Wortliste mit Emoji. Pro Runde: ein lesbares 
   - Aufwärmen und Bonus: nach **60 Sekunden** ohne Eingabe.
   - Leseblatt: nach **5 Minuten** ohne Eingabe (bei fehlerfreiem Lesen gibt es dort lange keine Eingabe).
   - Zusätzlich ein sichtbarer **Pause-Knopf**.
+  - Wird die App verdeckt (Tablet gesperrt, anderer Tab), pausiert der Timer sofort.
+  - Auf dem Abschluss-Bildschirm läuft keine Lesezeit mehr.
   - Die nächste Eingabe setzt den Timer fort.
 - **Lesemenge:** richtig gelesene Elemente (Wörter, Silben, Sätze) und Fehlversuche.
 - **Tagesziel:** **10 Minuten aktive Lesezeit** (in den Einstellungen änderbar). Mehrere Sitzungen am Tag werden addiert.
 - Dem Kind wird die Lesemenge gezeigt („Du hast heute 87 Wörter gelesen!“), dem Erwachsenen zusätzlich die Zeit.
+- Während der Tagesreise zeigt die Kopfzeile den Tagesfortschritt als schmalen Balken ohne Zahlen (Minuten nur als Tooltip). Ist das Ziel erreicht, wird der Balken golden mit ⭐ – ohne Ton oder Einblendung. Die eigentliche Rückmeldung kommt nach dem laufenden Blatt mit Bonus und Abschluss.
 
 ### 6.2 Spielelemente
 

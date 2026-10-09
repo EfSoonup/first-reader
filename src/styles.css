@@ -38,8 +38,12 @@ button.haupt { background: var(--akzent); border-color: var(--akzent); color: #f
 .sterne { font-size: 1.4rem; font-weight: 700; }
 button.gross { font-size: 2rem; padding: 1rem 2.5rem; }
 button.leise, .leise { color: var(--leise); }
-.fortschritt { width: min(480px, 100%); height: 24px; background: var(--rand); border-radius: 12px; overflow: hidden; }
-.fortschritt > div { height: 100%; background: var(--gruen); transition: width 0.5s; }
+.fortschritt { position: relative; width: min(480px, 100%); height: 24px; background: var(--rand); border-radius: 12px; overflow: hidden; }
+.fortschritt > div { height: 100%; background: var(--gruen); transition: width 0.5s, background 0.5s; }
+.fortschritt.klein { flex: 1; min-width: 120px; max-width: 320px; height: 14px; border-radius: 7px; }
+.fortschritt.erreicht > div { background: var(--akzent); }
+.fortschritt-stern { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 0.8em; line-height: 1; }
+.fortschritt.klein .fortschritt-stern { font-size: 10px; }
 .smileys { display: flex; gap: 8px; font-size: 2rem; }
 .smileys span { display: flex; flex-direction: column; align-items: center; }
 .smileys small { font-size: 0.8rem; color: var(--leise); }
@@ -65,6 +69,9 @@ button.leise, .leise { color: var(--leise); }
 .seite.reise { max-width: 1400px; }
 .blatt { background: var(--karte); border-radius: 16px; padding: 24px; }
 .zeile { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6em 0.9em; font-size: var(--blattgroesse); padding: 8px 0; border-bottom: 1px solid var(--rand); }
+.zeile { cursor: pointer; border-radius: 8px; transition: background 0.3s; }
+.zeile.gelesen { background: #e6f2e8; }
+.zeile-haken { margin-left: auto; color: var(--gruen); font-size: 0.6em; }
 .stern-markierung { width: 1.2em; font-size: 0.7em; }
 .satz { display: inline-flex; gap: 0.35em; align-items: center; }
 .bild { font-size: 1.1em; }

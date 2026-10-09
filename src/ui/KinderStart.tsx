@@ -6,6 +6,7 @@ import { baueKontext } from "../progress/kontext";
 import type { AppDaten } from "../progress/typen";
 import { sicherungFaellig } from "../storage/storage";
 import { Feier } from "./Feier";
+import { TagesFortschritt } from "./TagesFortschritt";
 import type { Aktualisiere } from "./useAppDaten";
 
 const WOCHENTAGE = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -18,7 +19,6 @@ export function KinderStart(p: {
   const stand = pruefeBuchstabenStand(k);
   const ziel = p.daten.einstellungen.tageszielMinuten;
   const heute = tageswerte(p.daten.sitzungen, tagSchluessel(jetzt));
-  const fortschritt = Math.min(1, heute.aktiveSekunden / (ziel * 60));
   const smileys = wochenSmileys(p.daten.sitzungen, jetzt, ziel);
   const kette = leseKette(p.daten.sitzungen, jetzt, ziel);
   const feierGraphem = p.daten.spielstand.offeneFeier[0];
@@ -33,10 +33,7 @@ export function KinderStart(p: {
       </div>
       <div className="maskottchen" aria-hidden="true">🦊</div>
       <h1>Hallo! Lust zu lesen?</h1>
-      <div className="fortschritt" role="progressbar" aria-label="Tagesziel"
-        aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fortschritt * 100)}>
-        <div style={{ width: `${fortschritt * 100}%` }} />
-      </div>
+      <TagesFortschritt sekunden={heute.aktiveSekunden} zielMinuten={ziel} />
       <p>Heute gelesen: {heute.richtig} Wörter</p>
       <div className="smileys" aria-label="Wochen-Smileys">
         {WOCHENTAGE.map((tag, i) => (
